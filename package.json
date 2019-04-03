@@ -1,0 +1,36 @@
+{
+  "name": "frenchflipcards",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "devpack": "webpack",
+    "test": "webpack-dev-server",
+    "start": "node server.js",
+    "server": "babel-node server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "webpack -p"
+  },
+  "author": "Ethan Watson",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-node5": "^12.0.1",
+    "concurrently": "^4.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "faker": "^4.1.0",
+    "graphiql": "^0.13.0",
+    "graphql": "^14.2.0",
+    "lodash": "^4.17.11",
+    "md5": "^2.2.1",
+    "pg": "^7.9.0",
+    "pg-hstore": "^2.3.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "sequelize": "^5.2.1"
+  }
+}

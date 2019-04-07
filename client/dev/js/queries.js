@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export const ALL_CARDS_QUERY = gql`
     query CardsQuery($wordType: [String] = ["noun", "adj", "verb"]) {
-      cardsAll(wordType: $wordType) {
+      cards: cardsAll(wordType: $wordType) {
           id
           french
           english
@@ -11,8 +11,8 @@ export const ALL_CARDS_QUERY = gql`
     `;
 
 export const FOCUSS_CARDS_QUERY = gql`
-    query FocussQuery($userid: Integer!, $wordType: [String] = ["noun", "adj", "verb"]){
-      cardsFocussed(userid: $userid, wordType: $wordType) {
+    query FocussQuery($userid: String!, $wordType: [String] = ["noun", "adj", "verb"]){
+      cards: cardsFocussed(userid: $userid, wordType: $wordType) {
           id
       	  french
           english
@@ -21,7 +21,7 @@ export const FOCUSS_CARDS_QUERY = gql`
     `;
 
 export const UPDATE_SCORE_POS = gql`
-    mutation updateScorePos($userid: Integer!, $wordid: Integer!){
+    mutation updateScorePos($userid: String!, $wordid: String!){
       updateScorePos(userid: $userid, wordid: $wordid) {
         score
       }
@@ -29,7 +29,7 @@ export const UPDATE_SCORE_POS = gql`
     `;
 
 export const UPDATE_SCORE_NEG = gql`
-    mutation updateScoreNeg($userid: Integer!, $wordid: Integer!){
+    mutation updateScoreNeg($userid: String!, $wordid: String!){
       updateScoreNeg(userid: $userid, wordid: $wordid) {
         score
       }
@@ -57,7 +57,7 @@ export const CREATE_USER = gql`
 
 
 export const CREATE_CARD = gql`
-    mutation createCard($userid: Integer!, $french: String!, $english: String!, $wordType: String!){
+    mutation createCard($userid: String!, $french: String!, $english: String!, $wordType: String!){
       addCard(userid: $userid, french: $french, english: $english, wordType: $wordType) {
         id
       }

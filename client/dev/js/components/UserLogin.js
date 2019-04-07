@@ -6,7 +6,6 @@ export class UserLogin extends Component {
 
     return (
       <div>
-
         <Query query={} variables={{ }}>
           {({loading, error, data}) => {
             if(loading) return <h2>Loading...</h2>

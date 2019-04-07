@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 import {  GraphQLObjectType,
+          GraphQLID,
           GraphQLInt,
           GraphQLString,
           GraphQLBoolean,
@@ -9,15 +10,17 @@ import {  GraphQLObjectType,
 import Db from './db';
 import md5 from 'md5';
 
+const jwt = require('jsonwebtoken');
+
 const Card = new GraphQLObjectType({
   name: 'Card',
   description: 'A word translation',
   fields: () => {
     return {
-      id: {
-        type: GraphQLInt,
+      _id: {
+        type: GraphQLID,
         resolve(card) {
-          return card.id
+          return card._id
         }
       },
       french: {
@@ -48,10 +51,10 @@ const User = new GraphQLObjectType({
   description: 'This is a user of the app',
   fields: () => {
     return {
-      id: {
-        type: GraphQLInt,
+      _id: {
+        type: GraphQLID,
         resolve(user) {
-          return user.id
+          return user._id
         }
       },
       username: {
@@ -76,25 +79,53 @@ const User = new GraphQLObjectType({
   }
 });
 
+
+const AuthData = new GraphQLObjectType({
+  name: 'AuthData',
+  description: 'Authentication for a user login',
+  fields: () => {
+    return {
+      userid: {
+        type: GraphQLID,
+        resolve(auth) {
+          return auth.userid
+        }
+      },
+      token: {
+        type: GraphQLString,
+        resolve(auth) {
+          return auth.token
+        }
+      },
+      tokenExpiration: {
+        type: GraphQLString,
+        resolve(auth) {
+          return auth.tokenExpiration
+        }
+      }
+    }
+  }
+});
+
 const Score = new GraphQLObjectType({
   name: 'Score',
   description: 'A users familiarality with words',
   fields: () => {
     return {
-      id: {
-        type: GraphQLInt,
+      _id: {
+        type: GraphQLID,
         resolve(score) {
-          return score.id
+          return score._id
         }
       },
       userid: {
-        type: GraphQLInt,
+        type: GraphQLID,
         resolve(score) {
           return score.userid
         }
       },
       wordid: {
-        type: GraphQLInt,
+        type: GraphQLID,
         resolve(score) {
           return score.wordid
         }
@@ -118,8 +149,8 @@ const Query = new GraphQLObjectType({
         type: new GraphQLList(Card),
         // args securely only permit certain types of arguments
         args: {
-          id: {
-            type: GraphQLInt
+          _id: {
+            type: GraphQLID
           },
           wordType: {
             type: new GraphQLList(GraphQLString)
@@ -138,7 +169,7 @@ const Query = new GraphQLObjectType({
             type: new GraphQLList(GraphQLString)
           },
           userid: {
-            type: new GraphQLNonNull(GraphQLInt)
+            type: new GraphQLNonNull(GraphQLID)
           }
         },
         //resolve(root, args) {
@@ -150,23 +181,23 @@ const Query = new GraphQLObjectType({
 
           return Db.query(`
             SELECT * FROM
-            (SELECT c.id, c.french, c.english, c."wordType"
+            (SELECT c._id, c.french, c.english, c."wordType"
             FROM "cards" c, "scores" s
-            WHERE c.id = s.wordid
-            AND   s.userid = ${args.userid}
+            WHERE c._id = s.wordid
+            AND   s.userid = '${args.userid}'
             AND   s.score <= (SELECT avg(s.score)
                             FROM "cards" c, "scores" s
-                            WHERE c.id = s.wordid
-                            AND   s.userid = ${args.userid})
+                            WHERE c._id = s.wordid
+                            AND   s.userid = '${args.userid}')
             AND c."wordType" IN (${wordTypes})
 
             UNION
 
-            SELECT DISTINCT id, french, english, "wordType"
+            SELECT DISTINCT _id, french, english, "wordType"
             FROM "cards"
-            WHERE id NOT IN ( SELECT wordid
+            WHERE _id NOT IN ( SELECT wordid
                                 FROM "scores"
-                                WHERE userid = ${args.userid})
+                                WHERE userid = '${args.userid}')
             AND "wordType" IN (${wordTypes})) AS Cards
             ORDER BY random();
             `, {
@@ -197,6 +228,41 @@ const Query = new GraphQLObjectType({
         }
       },
 
+      login: {
+        type: AuthData,
+        args: {
+          username: {
+            type: new GraphQLNonNull(GraphQLString)
+          },
+          password: {
+            type: new GraphQLNonNull(GraphQLString)
+          }
+        },
+        resolve(root, args) {
+          return Db.models.user.findOne({ where: { username: args.username, password: md5(args.password) }})
+          .then(user => {
+
+            if(!user) throw new Error("Invalid login credentials.");
+            //TODO ENV file
+            const stringHash = user.admin ? 'adminTODOchangeSuperSecretKeyInENV' : 'normieTODOchangeSuperSecretKeyInENV';
+
+            const token = jwt.sign({userid: user._id,
+                                  username: user.username },
+                                  stringHash,
+                                 { expiresIn: '1h' }
+                                );
+
+                    return {userId: user._id,
+                            token: token,
+                            tokenExpiration: 1
+                            };
+
+          });
+        }
+      },
+
+
+
       users: {
         type: new GraphQLList(User),
         args: {
@@ -213,10 +279,10 @@ const Query = new GraphQLObjectType({
         type: new GraphQLList(Score),
         args: {
           userid: {
-            type: GraphQLInt
+            type: new GraphQLNonNull(GraphQLID)
           },
           wordid: {
-            type: GraphQLInt
+            type: new GraphQLNonNull(GraphQLID)
           }
         },
         resolve(root, args) {
@@ -288,10 +354,10 @@ const Mutation = new GraphQLObjectType({
         type: Score,
         args: {
           userid: {
-            type: new GraphQLNonNull(GraphQLInt)
+            type: new GraphQLNonNull(GraphQLID)
           },
           wordid: {
-            type: new GraphQLNonNull(GraphQLInt)
+            type: new GraphQLNonNull(GraphQLID)
           }
         },
         resolve(_, args){
@@ -311,10 +377,10 @@ const Mutation = new GraphQLObjectType({
         type: Score,
         args: {
           userid: {
-            type: new GraphQLNonNull(GraphQLInt)
+            type: new GraphQLNonNull(GraphQLID)
           },
           wordid: {
-            type: new GraphQLNonNull(GraphQLInt)
+            type: new GraphQLNonNull(GraphQLID)
           }
         },
         resolve(_, args){
@@ -334,7 +400,7 @@ const Mutation = new GraphQLObjectType({
         type: Card,
         args: {
           userid: {
-            type: new GraphQLNonNull(GraphQLInt)
+            type: new GraphQLNonNull(GraphQLID)
           },
           french: {
             type: new GraphQLNonNull(GraphQLString)

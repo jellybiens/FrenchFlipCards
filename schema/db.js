@@ -3,9 +3,10 @@ import _ from 'lodash';
 import Faker from 'faker';
 import md5 from 'md5';
 const uuid = require('uuid/v4');
+require('dotenv').config();
 
-//TODO move to .env
-const Conn = new Sequelize('postgres://fspcxkbwvrqkji:58bed6f064097aef57279df0b605ceda656ff0e66d63a6a7469ab53c42034479@ec2-54-246-92-116.eu-west-1.compute.amazonaws.com:5432/d2mi6qqntgbeu', {
+
+const Conn = new Sequelize(process.env.DB_CON, {
     dialect: 'postgres',
     protocol: 'postgres',
     dialectOptions: {
@@ -73,40 +74,44 @@ Card.hasMany(Score, {foreignKey: 'wordid'});
 
 
 
-
-Conn.sync({force: true}).then(() => {
-
- User.create({
-    username: 'jellybiens',
-    password: md5('password'),
-    admin: true
-  });
-
-  _.times(2, ()=>{
-    return User.create({
-      username: Faker.internet.userName(),
-      password: md5(Faker.internet.password()),
-      admin: false
-    });
-  });
-
-  let wordArr = [
-                  {"french":"aller","english":"to go","wordType":"verb"},
-                  {"french":"vouloir","english":"to want","wordType":"verb"},
-                  {"french":"etre","english":"to be","wordType":"verb"},
-                  {"french":"une tasse","english":"a cup","wordType":"noun"},
-                  {"french":"un stylo","english":"a pen","wordType":"noun"}
-                ];
-
-  wordArr.map((v, i)=>{
-    return Card.create({
-      french: v.french,
-      english: v.english,
-      wordType: v.wordType
-    });
-  });
-
-
-});
+// Conn.sync({force: true}).then(() => {
+//
+//  User.create({
+//     username: 'jellybiens',
+//     password: md5('password'),
+//     admin: true
+//   });
+//  User.create({
+//     username: 'guest',
+//     password: md5('password123'),
+//     admin: false
+//   });
+//
+//   _.times(2, ()=>{
+//     return User.create({
+//       username: Faker.internet.userName(),
+//       password: md5(Faker.internet.password()),
+//       admin: false
+//     });
+//   });
+//
+//   let wordArr = [
+//                   {"french":"aller","english":"to go","wordType":"verb"},
+//                   {"french":"vouloir","english":"to want","wordType":"verb"},
+//                   {"french":"etre","english":"to be","wordType":"verb"},
+//                   {"french":"une tasse","english":"a cup","wordType":"noun"},
+//                   {"french":"un stylo","english":"a pen","wordType":"noun"}
+//                 ];
+//
+//   wordArr.map((v, i)=>{
+//     return Card.create({
+//       french: v.french,
+//       english: v.english,
+//       wordType: v.wordType
+//     });
+//   });
+//
+//
+// });
 
 export default Conn;

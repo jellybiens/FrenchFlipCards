@@ -6,6 +6,7 @@
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+      font-family: Courier New;
 }
 
 html, body, #root {
@@ -13,6 +14,14 @@ html, body, #root {
   padding: 0;
   width:100%;
   height:100%;
+
+}
+
+@mixin absolute-positioning($height, $width, $top, $left){
+  height:$height;
+  width:$width;
+  top:$top;
+  left:$left;
 }
 
 .App{
@@ -22,17 +31,205 @@ html, body, #root {
   height:100%;
   max-width:750px;
 
-  div{
+  %div{
     position:relative;
     width:100%;
-    height:100%;
+    height:90vh;
     top:0%;
     left:0%;
+    overflow:hidden;
 
   }
 
+  %button{
+    button{
+      position:absolute;
+      text-align: center;
+      background: #01d1d1;
+      border: 1px solid #01d1d1;
+      border-radius: 3px;
+      box-sizing:border-box;
+      box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+      color: #ffffff;
+      cursor: pointer;
+    }
+    button:active{
+      background: darken(#01a7a7, 10%);
+      border-color: darken(#01a7a7, 10%);
+    }
+  }
+
+  .sign-out{
+    position:relative;
+    @include absolute-positioning(10vh, 20vw, 0%, 0%);
+    @extend %button;
+    z-index:5;
+    button{
+      @include absolute-positioning(50%, 50%, 0%, 0%);
+      border-radius: 0px;
+      border-bottom-right-radius: 3px;
+      text-align: center;
+      padding: 0;
+      box-shadow: unset;
+    }
+  }
+
+  .AuthPage{
+    @extend %div;
+
+    form{
+      position:absolute;
+      height:98%;
+      width:98%;
+      top:1%;
+      left:1%;
+
+      .errorMessage, input{
+        position:absolute;
+        text-align: center;
+        border : 0;
+        font-size: 3em;
+      }
+      .errorMessage{
+        font-size: 110%;
+        color:#ff0000;
+        text-shadow: 0px 0px 2px #770000;
+
+        span{
+          position:relative;
+          top:40%;
+          transform: translate(-50%, -50%);
+        }
+
+      }
+      @extend %button;
+
+      input:nth-of-type(1)  { @include absolute-positioning(14%, 100%, 0%, 0%); }
+      input:nth-of-type(2)  { @include absolute-positioning(14%, 100%, 15%, 0%); }
+      input:nth-of-type(3)  { @include absolute-positioning(14%, 100%, 30%, 0%); }
+      .errorMessage         { @include absolute-positioning(10%, 80%, 44%, 10%); }
+      button:nth-of-type(1) { @include absolute-positioning(14%, 90%, 54%, 5%); }
+      button:nth-of-type(2) { @include absolute-positioning(14%, 90%, 69%, 5%); }
+      button:nth-of-type(3) { @include absolute-positioning(14%, 90%, 84%, 5%); }
+
+    }
+  }
+
+
+  .main-menu{
+    @extend %div;
+    position:relative;
+
+
+    div{
+      position:relative;
+      text-align: center;
+      display:flex;
+      span{
+        position:absolute;
+        top:50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      div{
+        position:relative;
+        text-align: center;
+        background: #01d1d1;
+        border: 1px solid #01d1d1;
+        border-radius: 3px;
+        box-sizing:border-box;
+        box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+        color: #ffffff;
+        cursor: pointer;
+        span{
+          position:absolute;
+          top:50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+      .active{
+        background: #01a7a7;
+        border-color: #01a7a7;
+      }
+      div:active{
+        background: darken(#01a7a7, 10%);
+        border-color: darken(#01a7a7, 10%);
+      }
+    }
+
+    .cards-types-header{  @include absolute-positioning(5%, 100%, 0, 0); }
+    .cards-types-options{ @include absolute-positioning(20%, 100%, 0, 0); }
+    .cards-focus-header{  @include absolute-positioning(2%, 100%, 3%, 0); }
+    .cards-focus-options{ @include absolute-positioning(20%, 96%, 0, 2%); }
+    .cards-front-header{  @include absolute-positioning(2%, 100%, 3%, 0); }
+    .cards-front-options{ @include absolute-positioning(20%, 96%, 0, 2%); }
+    .confirm-options{     @include absolute-positioning(25%, 96%, 0, 2%); }
+
+    .cards-types-options{
+      div{
+        position:relative;
+      }
+      $opt-height: 80%;
+      $opt-top: (100% - $opt-height)/2;
+      $opt-width: 30%;
+      $opt-left: (100% - $opt-width*3)/4;
+
+      .verb-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left); }
+      .noun-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*2)); }
+      .adj-opt  { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*3)); }
+    }
+
+    $opt-height: 50%;
+    $opt-top: (100% - $opt-height)/2;
+
+    .cards-focus-options{
+      $opt-width: 50%;
+      $opt-left: 0;//(100% - $opt-width*2)/2;
+
+      .all-opt{
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+      .focus-opt{
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+      }
+    }
+
+    .cards-front-options{
+      $opt-width: 33.33%;
+      $opt-left: 0;
+
+      .french-opt{
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+      .both-opt{
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
+        border-radius:0;
+      }
+      .english-opt{
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+      }
+    }
+
+    .confirm-options{
+      @extend %button;
+      button{ @include absolute-positioning(70%, 70%, 15%, 15%); }
+    }
+  }
+
+
   .cards_deck{
-    overflow:hidden;
+    position:absolute !important;
+    height:100% !important;
+    @extend %div;
     .left-gradient, .right-gradient{
         transition: 0.2s;
         transition-property: opacity;
@@ -64,9 +261,9 @@ html, body, #root {
       transition-property: opacity;
       position:absolute;
       height:20%;
-      width:90%;
+      width:100%;
       top:80%;
-      left:5%;
+      left:0%;
       opacity:0;
       box-sizing:border-box;
       font-size: 150%;
@@ -75,12 +272,15 @@ html, body, #root {
 
       span{
         position:absolute;
+        width:100%;
         top:50%;
         transform: translate(-50%, -50%);
       }
 
     }
 
+    @extend %button;
+    .end-of-stack{ @include absolute-positioning(20%, 40%, 40%, 30%); }
 
     .card{
       position:absolute;
@@ -100,9 +300,12 @@ html, body, #root {
         }
 
         .flipper {
+          @extend %div;
+          height:100% !important;
         	transition: 0.6s;
         	transform-style: preserve-3d;
         	position: absolute;
+          overflow: visible;
 
           .front, .back {
             position: absolute;

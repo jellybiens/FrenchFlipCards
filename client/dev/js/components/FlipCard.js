@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-
+import { Redirect } from 'react-router-dom';
+import AuthContext from '../../context/auth-context';
 import { Mutation } from 'react-apollo';
 import { UPDATE_SCORE_POS, UPDATE_SCORE_NEG } from '../queries.js';
 
@@ -7,6 +8,8 @@ const Swing = require('swing');
 
 
 export class FlipCard extends Component {
+
+  static contextType = AuthContext;
 
   constructor(){
     super();
@@ -56,9 +59,13 @@ export class FlipCard extends Component {
         event.target.querySelector('.submitNeg').dispatchEvent(new Event('submit'));
       }
 
+      let parent = event.target.parentNode
+
       let card = stack.getCard(event.target)
       card.destroy();
-      event.target.remove();
+      event.target.remove()
+      if(parent.childElementCount === 4) this.props.endofstack();
+
     });
 
 
@@ -114,14 +121,15 @@ export class FlipCard extends Component {
 
   }
 
-render() {
+render(){
 
-    let id = this.props.card.id;
+  console.log(this.context.userid)
+    let cardid = this.props.card._id;
     let french = this.props.card.french;
     let english = this.props.card.english;
 
     return (
-      <div className="card" onClick={() => this.flipCard()} id={id}>
+      <div className="card" onClick={() => this.flipCard()} id={cardid}>
         <div className="flip-container">
           <div className={!this.state.flip ? "flipper" : "flipper flipped"}>
             <div className="front">
@@ -139,7 +147,7 @@ render() {
               <form className="submitPos"
                 onSubmit={e => {
                   e.preventDefault();
-                  updateScorePos({ variables: { userid: 1, wordid: id } });
+                  updateScorePos({ variables: { userid: this.context.userid, wordid: cardid } });
                 }}
               >
               </form>
@@ -153,7 +161,7 @@ render() {
               <form className="submitNeg"
                 onSubmit={e => {
                   e.preventDefault();
-                  updateScoreNeg({ variables: { userid: 1, wordid: id } });
+                  updateScoreNeg({ variables: { userid: this.context.userid, wordid: cardid } });
                 }}
               >
               </form>

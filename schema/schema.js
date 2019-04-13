@@ -79,7 +79,6 @@ const User = new GraphQLObjectType({
   }
 });
 
-
 const AuthData = new GraphQLObjectType({
   name: 'AuthData',
   description: 'Authentication for a user login',
@@ -156,7 +155,12 @@ const Query = new GraphQLObjectType({
             type: new GraphQLList(GraphQLString)
           }
         },
-        resolve(root, args) {
+        resolve(_, args, req) {
+
+          if(!req.isLoggedIn && !req.isAdmin){
+            throw new Error('Not logged in!')
+          }
+
           return Db.models.card.findAll({where: args, order: Sequelize.literal('random()')})
         }
       },
@@ -172,10 +176,12 @@ const Query = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLID)
           }
         },
-        //resolve(root, args) {
-        //  return Db.models.card.findAll({where: args, order: Sequelize.literal('random()')})
-        //}
-        resolve(root, args){
+
+        resolve(_, args, req){
+
+          if(!req.isLoggedIn && !req.isAdmin){
+            throw new Error('Not logged in!')
+          }
 
           let wordTypes = args.wordType.map(wt => `'${wt}'`).join(',');
 
@@ -207,28 +213,7 @@ const Query = new GraphQLObjectType({
         }
       },
 
-      user: {
-        type: User,
-        args: {
-          username: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          password: {
-            type: new GraphQLNonNull(GraphQLString)
-          }
-        },
-        resolve(root, args) {
-          return Db.models.user.findOne({ where: {username: args.username, password: md5(args.password)}})
-          .then(res => {
-              if (res == null) {
-                throw new Error("Invalid username and/or password.");
-              }
-              return res
-          });
-        }
-      },
-
-      login: {
+      userLogin: {
         type: AuthData,
         args: {
           username: {
@@ -238,30 +223,31 @@ const Query = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLString)
           }
         },
-        resolve(root, args) {
+        resolve(_, args) {
           return Db.models.user.findOne({ where: { username: args.username, password: md5(args.password) }})
           .then(user => {
 
             if(!user) throw new Error("Invalid login credentials.");
-            //TODO ENV file
-            const stringHash = user.admin ? 'adminTODOchangeSuperSecretKeyInENV' : 'normieTODOchangeSuperSecretKeyInENV';
 
-            const token = jwt.sign({userid: user._id,
-                                  username: user.username },
-                                  stringHash,
-                                 { expiresIn: '1h' }
-                                );
+            const stringHash = user.admin ? process.env.ADMIN_TOKEN : process.env.NORMIE_TOKEN;
 
-                    return {userId: user._id,
-                            token: token,
-                            tokenExpiration: 1
+            const token = jwt.sign( {
+                                    userid: user._id,
+                                    username: user.username
+                                    },
+                                    stringHash,
+                                    { expiresIn: '1h' }
+                                  );
+
+                    return {
+                              userid: user._id,
+                              token: token,
+                              tokenExpiration: 1
                             };
 
           });
         }
       },
-
-
 
       users: {
         type: new GraphQLList(User),
@@ -270,7 +256,12 @@ const Query = new GraphQLObjectType({
             type: GraphQLString
           }
         },
-        resolve(root, args) {
+        resolve(_, args, req) {
+
+          if(!req.isAdmin){
+            throw new Error('Unauthorised!')
+          }
+
           return Db.models.user.findAll({where: args});
         }
       },
@@ -285,7 +276,12 @@ const Query = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLID)
           }
         },
-        resolve(root, args) {
+        resolve(_, args, req) {
+
+          if(!req.isLoggedIn && !req.isAdmin){
+            throw new Error('Not logged in!')
+          }
+
           return Db.models.score.findAll({where: args})
         }
       }
@@ -307,12 +303,9 @@ const Mutation = new GraphQLObjectType({
           },
           password: {
             type: new GraphQLNonNull(GraphQLString)
-          },
-          admin: {
-            type: new GraphQLNonNull(GraphQLBoolean)
           }
         },
-        resolve(_, args){
+        resolve(_, args, req){
 
           return Db.models.user.findOne({where: {username: args.username}})
           .then(res => {
@@ -341,12 +334,25 @@ const Mutation = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLString)
           }
         },
-        resolve(_, args){
-          return Db.models.card.create({
-            french: args.french.toLowerString(),
-            english: args.english.toLowerString(),
-            wordType: args.wordType
-          });
+        resolve(_, args, req){
+
+          if(!req.isAdmin){
+            throw new Error('Unauthorised!')
+          }
+
+          return Db.models.card.findOne({ where: {french: args.french} })
+                .then((res) => {
+                  if(res != null){
+                    throw new Error("Card already exists.");
+                  }
+                  else {
+                    return Db.models.card.create({
+                      french: args.french,
+                      english: args.english,
+                      wordType: args.wordType
+                    });
+                  }
+                })
         }
       },
 
@@ -360,7 +366,12 @@ const Mutation = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLID)
           }
         },
-        resolve(_, args){
+        resolve(_, args, req){
+
+          if(!req.isLoggedIn && !req.isAdmin){
+            throw new Error('Not logged in!')
+          }
+
           return Db.models.score.findOne({ where: args })
             .then((obj) => {
                 if(obj) { // update
@@ -383,7 +394,12 @@ const Mutation = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLID)
           }
         },
-        resolve(_, args){
+        resolve(_, args, req){
+
+          if(!req.isLoggedIn && !req.isAdmin){
+            throw new Error('Not logged in!')
+          }
+
           return Db.models.score.findOne({ where: args })
             .then((obj) => {
                 if(obj) { // update
@@ -396,46 +412,7 @@ const Mutation = new GraphQLObjectType({
         }
       },
 
-      addCard: {
-        type: Card,
-        args: {
-          userid: {
-            type: new GraphQLNonNull(GraphQLID)
-          },
-          french: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          english: {
-            type: new GraphQLNonNull(GraphQLString)
-          },
-          wordType: {
-            type: new GraphQLNonNull(GraphQLString)
-          }
-        },
-        resolve(_, args){
-          return Db.models.user.findOne({ where: {id: args.userid} })
-            .then((obj) => {
-                if(obj.admin) { // is admin
-                    return Db.models.card.findOne({ where: {french: args.french} })
-                          .then((res) => {
-                            if(res != null){
-                              throw new Error("Card already exists.");
-                            }
-                            else {
-                              return Db.models.card.create({
-                                french: args.french,
-                                english: args.english,
-                                wordType: args.wordType
-                              });
-                            }
-                          })
-                }
-                else { // not admin
-                    throw new Error("User is not admin.");
-                }
-            });
-        }
-      }
+
     }
   }
 });

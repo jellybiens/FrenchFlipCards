@@ -31,6 +31,9 @@ module.exports = {
       }
     ]
   },
+  devServer: {
+    historyApiFallback: true,
+  },
   plugins: [
     new MiniCssExtractPlugin({
         filename: 'css/style.css'
@@ -38,6 +41,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './dev/template.html'
     })
+
   ]
 
 }

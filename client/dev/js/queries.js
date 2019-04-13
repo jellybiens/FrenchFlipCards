@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 export const ALL_CARDS_QUERY = gql`
     query CardsQuery($wordType: [String] = ["noun", "adj", "verb"]) {
       cards: cardsAll(wordType: $wordType) {
-          id
+          _id
           french
           english
       }
@@ -11,9 +11,9 @@ export const ALL_CARDS_QUERY = gql`
     `;
 
 export const FOCUSS_CARDS_QUERY = gql`
-    query FocussQuery($userid: String!, $wordType: [String] = ["noun", "adj", "verb"]){
+    query FocussQuery($userid: ID!, $wordType: [String] = ["noun", "adj", "verb"]){
       cards: cardsFocussed(userid: $userid, wordType: $wordType) {
-          id
+          _id
       	  french
           english
       }
@@ -21,7 +21,7 @@ export const FOCUSS_CARDS_QUERY = gql`
     `;
 
 export const UPDATE_SCORE_POS = gql`
-    mutation updateScorePos($userid: String!, $wordid: String!){
+    mutation updateScorePos($userid: ID!, $wordid: ID!){
       updateScorePos(userid: $userid, wordid: $wordid) {
         score
       }
@@ -29,7 +29,7 @@ export const UPDATE_SCORE_POS = gql`
     `;
 
 export const UPDATE_SCORE_NEG = gql`
-    mutation updateScoreNeg($userid: String!, $wordid: String!){
+    mutation updateScoreNeg($userid: ID!, $wordid: ID!){
       updateScoreNeg(userid: $userid, wordid: $wordid) {
         score
       }
@@ -37,29 +37,29 @@ export const UPDATE_SCORE_NEG = gql`
     `;
 
 
-export const USER_VALIDATION = gql`
-    query user_validation($username: String!, $password: String!){
-      user(username: $username, password: $password) {
-        id
-        username
-        admin
+export const USER_LOGIN = gql`
+    query userLogin($username: String!, $password: String!){
+      userLogin(username: $username, password: $password) {
+        userid
+        token
+        tokenExpiration
       }
     }
     `;
 
-export const CREATE_USER = gql`
+export const USER_SIGN_UP = gql`
     mutation createUser($username: String!, $password: String!){
-      addUser(username: $username, password: $password, admin:false){
-        id
+      addUser(username: $username, password: $password){
+        _id
      }
     }
     `;
 
 
 export const CREATE_CARD = gql`
-    mutation createCard($userid: String!, $french: String!, $english: String!, $wordType: String!){
-      addCard(userid: $userid, french: $french, english: $english, wordType: $wordType) {
-        id
+    mutation createCard($french: String!, $english: String!, $wordType: String!){
+      addCard(french: $french, english: $english, wordType: $wordType) {
+        _id
       }
     }
     `;

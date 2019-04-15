@@ -41,6 +41,7 @@ export const USER_LOGIN = gql`
     query userLogin($username: String!, $password: String!){
       userLogin(username: $username, password: $password) {
         userid
+        admin
         token
         tokenExpiration
       }

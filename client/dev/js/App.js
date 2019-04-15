@@ -14,20 +14,34 @@ class App extends Component {
   static contextType = AuthContext;
 
   constructor(){
+
+    const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token"))
+                : {
+                  token:  null,
+                  userid: null,
+                  admin: false,
+                  tokenExpiration: null
+                };
+
     super();
       this.state = {
-        token: localStorage.getItem("token") || null,
-        userid: null,
-        tokenExpiration: null
+        token: token.token || null,
+        userid: token.userid ||  null,
+        admin: token.admin ||  false,
+        tokenExpiration: token.tokenExpiration || null
       }
   }
 
-  sessionlogin = (token, userid, tokenExpiration) => {
-    localStorage.setItem("token", token);
+  sessionlogin = (token, userid, admin, tokenExpiration) => {
+
+    const tokenObj = { token: token, userid: userid, admin: admin, tokenExpiration: tokenExpiration };
+
+    localStorage.setItem("token", JSON.stringify(tokenObj));
 
     this.setState({
       token: token,
       userid: userid,
+      admin: admin,
       tokenExpiration: tokenExpiration
     });
   }
@@ -39,6 +53,7 @@ class App extends Component {
     this.setState({
       token: null,
       userid: null,
+      admin: false,
       tokenExpiration: null
     });
   }
@@ -52,13 +67,14 @@ class App extends Component {
       <AuthContext.Provider value={{
                                     token: this.state.token,
                                     userid: this.state.userid,
+                                    admin: this.state.admin,
                                     tokenExpiration: this.state.tokenExpiration,
                                     login: this.sessionlogin,
                                     signout: this.sessionsignout,
                                   }}>
 
         <div className="App">
-            {token && <div className="sign-out"><button className="sign-out" onClick={()=> this.sessionsignout()}>Sign Out</button></div>}
+            {token && <div className="sign-out"><button onClick={()=> this.sessionsignout()}>Sign Out</button></div>}
             <Switch>
 
               {!token && <Redirect path="/" to="/AuthPage" exact />}

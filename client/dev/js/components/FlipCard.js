@@ -26,6 +26,7 @@ export class FlipCard extends Component {
 
   componentDidMount(){
     if(this.props.final) this.buildCards();
+
   }
 
   buildCards(){
@@ -64,7 +65,7 @@ export class FlipCard extends Component {
       let card = stack.getCard(event.target)
       card.destroy();
       event.target.remove()
-      if(parent.childElementCount === 4) this.props.endofstack();
+      if(parent.childElementCount === 5) this.props.endofstack();
 
     });
 
@@ -119,24 +120,44 @@ export class FlipCard extends Component {
 
     });
 
+
+    const checkKey = (e) => {
+      // if (e.keyCode == '37') { //leftArr
+      //   //card.throwOut(10, 4);
+      // }
+      // else if (e.keyCode == '39') {//rightArr
+      //   //card.throwOut(1, 0);
+      // }
+      // else
+      if (e.keyCode == '32') {//spaceBar
+        e = e || window.event;
+        const topCard = document.querySelector('.card:last-child');
+        const card = stack.getCard(topCard);
+        const event = new Event('click');
+        topCard.click();
+      }
+    }
+
+
+    document.onkeydown = checkKey;
   }
 
 render(){
 
-  console.log(this.context.userid)
+
     let cardid = this.props.card._id;
-    let french = this.props.card.french;
-    let english = this.props.card.english;
+    let frontWord = this.props.frontFace === "english" ? this.props.card.english : this.props.card.french;
+    let backWord = this.props.frontFace === "english" ? this.props.card.french : this.props.card.english;
 
     return (
       <div className="card" onClick={() => this.flipCard()} id={cardid}>
         <div className="flip-container">
           <div className={!this.state.flip ? "flipper" : "flipper flipped"}>
             <div className="front">
-              <span>{french}</span>
+              <span>{frontWord}</span>
             </div>
             <div className="back">
-              <span>{english}</span>
+              <span>{backWord}</span>
             </div>
           </div>
         </div>
@@ -146,6 +167,7 @@ render(){
           {(updateScorePos, { data }) => (
               <form className="submitPos"
                 onSubmit={e => {
+                  if(!this.context.userid) {; this.context.signout(); return <Redirect to="/" />}
                   e.preventDefault();
                   updateScorePos({ variables: { userid: this.context.userid, wordid: cardid } });
                 }}
@@ -160,6 +182,7 @@ render(){
           {(updateScoreNeg, { data }) => (
               <form className="submitNeg"
                 onSubmit={e => {
+                  if(!this.context.userid) {; this.context.signout(); return <Redirect to="/" />}
                   e.preventDefault();
                   updateScoreNeg({ variables: { userid: this.context.userid, wordid: cardid } });
                 }}

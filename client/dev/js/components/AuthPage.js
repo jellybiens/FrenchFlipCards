@@ -76,6 +76,7 @@ export class AuthPage extends Component {
       this.context.login(
         resData.data.userLogin.token,
         resData.data.userLogin.userid,
+        resData.data.userLogin.admin,
         resData.data.userLogin.tokenExpiration
       );
     }

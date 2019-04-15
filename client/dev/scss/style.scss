@@ -54,23 +54,44 @@ html, body, #root {
       cursor: pointer;
     }
     button:active{
-      background: darken(#01a7a7, 10%);
-      border-color: darken(#01a7a7, 10%);
+      background: darken(#01a7a7, 20%);
+      border-color: darken(#01a7a7, 25%);
+    }
+  }
+
+  .sign-out, .go-back, .add-cards-btn{
+    position: relative;
+    @extend %button;
+    z-index:5;
+    button{
+      border-radius: 0px;
+      text-align: center;
+      padding: 0;
+      box-shadow: unset;
     }
   }
 
   .sign-out{
-    position:relative;
-    @include absolute-positioning(10vh, 20vw, 0%, 0%);
-    @extend %button;
-    z-index:5;
+    float:left;
+    @include absolute-positioning(10vh, 20%, 0%, 0%);
     button{
       @include absolute-positioning(50%, 50%, 0%, 0%);
-      border-radius: 0px;
       border-bottom-right-radius: 3px;
-      text-align: center;
-      padding: 0;
-      box-shadow: unset;
+    }
+  }
+
+  .go-back{
+    @include absolute-positioning(10vh, 20%, 0%, 90%)
+    button{
+      @include absolute-positioning(50%, 50%, 0%, 0%);
+      border-bottom-left-radius: 3px;
+    }
+  }
+  .add-cards-btn{
+    @include absolute-positioning(10vh, 10%, 0%, 90%)
+    button{
+      @include absolute-positioning(50%, 100%, 0%, 0%);
+      border-bottom-left-radius: 3px;
     }
   }
 
@@ -88,8 +109,9 @@ html, body, #root {
         position:absolute;
         text-align: center;
         border : 0;
-        font-size: 3em;
+        font-size: 1.5em;
       }
+      button{font-size: 1.5em;}
       .errorMessage{
         font-size: 110%;
         color:#ff0000;
@@ -104,13 +126,13 @@ html, body, #root {
       }
       @extend %button;
 
-      input:nth-of-type(1)  { @include absolute-positioning(14%, 100%, 0%, 0%); }
-      input:nth-of-type(2)  { @include absolute-positioning(14%, 100%, 15%, 0%); }
-      input:nth-of-type(3)  { @include absolute-positioning(14%, 100%, 30%, 0%); }
-      .errorMessage         { @include absolute-positioning(10%, 80%, 44%, 10%); }
-      button:nth-of-type(1) { @include absolute-positioning(14%, 90%, 54%, 5%); }
-      button:nth-of-type(2) { @include absolute-positioning(14%, 90%, 69%, 5%); }
-      button:nth-of-type(3) { @include absolute-positioning(14%, 90%, 84%, 5%); }
+      input:nth-of-type(1)  { @include absolute-positioning(10%, 90%, 10%, 5%); }
+      input:nth-of-type(2)  { @include absolute-positioning(10%, 90%, 23%, 5%); }
+      input:nth-of-type(3)  { @include absolute-positioning(10%, 90%, 36%, 5%); }
+      .errorMessage         { @include absolute-positioning(8%, 80%, 46%, 10%); }
+      button:nth-of-type(1) { @include absolute-positioning(12%, 85%, 54%, 7.5%); }
+      button:nth-of-type(2) { @include absolute-positioning(12%, 85%, 69%, 7.5%); }
+      button:nth-of-type(3) { @include absolute-positioning(12%, 85%, 84%, 7.5%); }
 
     }
   }
@@ -135,11 +157,11 @@ html, body, #root {
         position:relative;
         text-align: center;
         background: #01d1d1;
-        border: 1px solid #01d1d1;
-        border-radius: 3px;
+        border: 1px solid darken(#01a7a7, 2%);
+        border-radius: 5px;
         box-sizing:border-box;
         box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
-        color: #ffffff;
+        color: #222222;
         cursor: pointer;
         span{
           position:absolute;
@@ -149,12 +171,17 @@ html, body, #root {
         }
       }
       .active{
-        background: #01a7a7;
-        border-color: #01a7a7;
+        background: darken(#01a7a7, 10%);
+        border-color: darken(#01a7a7, 15%);
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        border-width: 5px;
+        color: #ffffff;
+        font-weight: bolder;
       }
       div:active{
-        background: darken(#01a7a7, 10%);
-        border-color: darken(#01a7a7, 10%);
+        background: darken(#01a7a7, 20%);
+        border-color: darken(#01a7a7, 25%);
+        color: #ffffff;
       }
     }
 
@@ -175,9 +202,9 @@ html, body, #root {
       $opt-width: 30%;
       $opt-left: (100% - $opt-width*3)/4;
 
-      .verb-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left); }
-      .noun-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*2)); }
-      .adj-opt  { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*3)); }
+      .verb-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left); filter: hue-rotate(90deg); }
+      .noun-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*2)); filter: hue-rotate(180deg); }
+      .adj-opt  { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*3)); filter: hue-rotate(270deg); }
     }
 
     $opt-height: 50%;
@@ -227,8 +254,8 @@ html, body, #root {
 
 
   .cards_deck{
-    position:absolute !important;
     height:100% !important;
+    top: -10vh;
     @extend %div;
     .left-gradient, .right-gradient{
         transition: 0.2s;
@@ -240,6 +267,7 @@ html, body, #root {
         border-radius: 100%;
         opacity:0;
         -webkit-filter: blur(10px);
+        z-index:3;
     }
 
     .left-gradient{
@@ -285,9 +313,9 @@ html, body, #root {
     .card{
       position:absolute;
       height:40%;
-      width:60%;
+      width:80%;
       top:30%;
-      left:20%;
+      left:10%;
 
       .flip-container {
         position:absolute;
@@ -346,4 +374,109 @@ html, body, #root {
 
     }
   }
+
+
+
+  .add-cards{
+    @extend %div;
+    height:100% !important;
+    top: -10vh;
+
+    form{
+      position:absolute;
+      height:98%;
+      width:98%;
+      top:1%;
+      left:1%;
+
+      .errorMessage, .resMessage, input{
+        position:absolute;
+        text-align: center;
+        border : 0;
+        font-size: 1.5em;
+      }
+      button{font-size: 1.5em;}
+      .errorMessage, .resMessage{
+        font-size: 120%;
+        color:#ff0000;
+        text-shadow: 0px 0px 2px #770000;
+
+        span{
+          position:relative;
+          top:40%;
+          transform: translate(-50%, -50%);
+        }
+      }
+      .resMessage{
+        color:#00cc00;
+        text-shadow: 0px 0px 2px #004400;
+      }
+      @extend %button;
+
+      input:nth-of-type(1)  { @include absolute-positioning(10%, 90%, 10%, 5%); }
+      input:nth-of-type(2)  { @include absolute-positioning(10%, 90%, 23%, 5%); }
+      .cards-types-header   { @include absolute-positioning(3%, 90%, 40%, 5%); }
+      .cards-types-options  { @include absolute-positioning(20%, 90%, 40%, 5%); }
+      .resMessage           { @include absolute-positioning(8%, 80%, 65%, 10%); }
+      .errorMessage         { @include absolute-positioning(8%, 80%, 65%, 10%); }
+      button:nth-of-type(1) { @include absolute-positioning(12%, 85%, 75%, 7.5%); }
+
+      .cards-types-header, .cards-types-options{
+        position:relative;
+        text-align: center;
+        display:flex;
+        $opt-height: 80%;
+        $opt-top: (100% - $opt-height)/2;
+        $opt-width: 30%;
+        $opt-left: (100% - $opt-width*3)/4;
+
+        .verb-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left); filter: hue-rotate(90deg); }
+        .noun-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*2)); filter: hue-rotate(180deg); }
+        .adj-opt  { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*3)); filter: hue-rotate(270deg); }
+
+        span{
+          position:absolute;
+          top:50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+        div{
+          position:relative;
+          text-align: center;
+          background: #01d1d1;
+          border: 1px solid darken(#01a7a7, 2%);
+          border-radius: 5px;
+          box-sizing:border-box;
+          box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+          color: #222222;
+          cursor: pointer;
+          span{
+            position:absolute;
+            top:50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+        .active{
+          background: darken(#01a7a7, 10%);
+          border-color: darken(#01a7a7, 15%);
+          box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+          border-width: 5px;
+          color: #ffffff;
+          font-weight: bolder;
+        }
+        div:active{
+          background: darken(#01a7a7, 20%);
+          border-color: darken(#01a7a7, 25%);
+          color: #ffffff;
+        }
+      }
+
+
+
+    }
+  }
+
+
+
 }

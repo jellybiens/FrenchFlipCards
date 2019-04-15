@@ -1,9 +1,18 @@
 import React from 'react';
 
+const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token"))
+            : {
+              token:  null,
+              userid: null,
+              admin: false,
+              tokenExpiration: null
+            };
+
 export default React.createContext({
-  token: localStorage.getItem("token") || null,
-  userid: localStorage.getItem("userid") || null,
-  tokenExpiration: localStorage.getItem("tokenExpiration") || null,
+  token: token.token,
+  userid: token.userid,
+  admin: token.admin,
+  tokenExpiration: token.tokenExpiration,
   login: () => {},
   logout: () => {}
 });

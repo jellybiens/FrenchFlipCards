@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Redirect  } from 'react-router-dom';
+import { Redirect, NavLink  } from 'react-router-dom';
 
 import AuthContext from '../../context/auth-context';
 
@@ -38,8 +38,10 @@ export class MainMenu extends Component {
     if(this.state.onyva) return <Redirect to={{pathname:"/FlipCards", state:{ wordType: wordType, focussed: focussed, frontFace: frontFace }}} />
 
     return (
-      <div className="main-menu">
+      <Fragment>
+      {this.context.admin && <NavLink to="/AddWords"><div className="add-cards-btn"><button>Add Cards</button></div></NavLink>}
 
+      <div className="main-menu">
         <div className="cards-types-header"><span>WORD TYPES</span></div>
         <div className="cards-types-options">
           <div className={!wordType.includes("verb") ? "verb-opt" : "verb-opt active"}
@@ -83,7 +85,7 @@ export class MainMenu extends Component {
           <div className={frontFace == "both" ? "both-opt active" : "both-opt"}
                onClick={() => this.setState({frontFace: "both"})}
               >
-            <span>BOTH</span>
+            <span>MIXED</span>
           </div>
           <div className={frontFace == "english" ? "english-opt active" : "english-opt"}
                onClick={() => this.setState({frontFace: "english"})}
@@ -99,6 +101,7 @@ export class MainMenu extends Component {
 
 
       </div>
+      </Fragment>
     );
   }
 }

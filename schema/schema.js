@@ -90,6 +90,12 @@ const AuthData = new GraphQLObjectType({
           return auth.userid
         }
       },
+      admin: {
+        type: GraphQLBoolean,
+        resolve(auth) {
+          return auth.admin
+        }
+      },
       token: {
         type: GraphQLString,
         resolve(auth) {
@@ -233,7 +239,8 @@ const Query = new GraphQLObjectType({
 
             const token = jwt.sign( {
                                     userid: user._id,
-                                    username: user.username
+                                    username: user.username,
+                                    admin: user.admin,
                                     },
                                     stringHash,
                                     { expiresIn: '1h' }
@@ -241,6 +248,7 @@ const Query = new GraphQLObjectType({
 
                     return {
                               userid: user._id,
+                              admin: user.admin,
                               token: token,
                               tokenExpiration: 1
                             };

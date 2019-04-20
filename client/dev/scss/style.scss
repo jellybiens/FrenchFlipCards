@@ -335,6 +335,10 @@ html, body, #root {
         	position: absolute;
           overflow: visible;
 
+          .verb-card { background-color: adjust-hue(lighten(#01d1d1, 50%), 90%); }
+          .noun-card { background-color: adjust-hue(lighten(#01d1d1, 50%), 180%); }
+          .adj-card  { background-color: adjust-hue(lighten(#01d1d1, 50%), 270%); }
+
           .front, .back {
             position: absolute;
           	width: 90%;
@@ -344,20 +348,23 @@ html, body, #root {
           	top: 5%;
           	left: 5%;
 
-            background-color:#eeeeee;
-            border: 5px solid #000000;
-            border-radius: 10%;
+            //background-color: adjust-hue(lighten(#01d1d1, 35%), 25%);
+            border: 3px solid #000000;
+            border-radius: 10px;
             box-sizing:border-box;
             color: #111111;
 
             text-align: center;
-            font-size: 200%;
+            font-size: 150%;
 
             span{
               position:absolute;
               width: 90%;
               top:50%;
               transform: translate(-50%, -50%);
+              .redA{color:#ff0000;}
+              .blueDE{color:#0000ff;}
+              .orangeSE{color:#ffa500;}
             }
           }
 

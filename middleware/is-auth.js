@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
   }
 
   let decodedNormie, decodedAdmin;
-  
+
   jwt.verify(token, process.env.NORMIE_TOKEN, (err, decoded) => decodedNormie = decoded ? decoded : false);
   jwt.verify(token, process.env.ADMIN_TOKEN, (err, decoded) => decodedAdmin = decoded ? decoded : false);
 

@@ -2,6 +2,7 @@ import Sequelize from 'sequelize';
 import _ from 'lodash';
 import Faker from 'faker';
 import md5 from 'md5';
+import { WORD_ARR } from './dbinit';
 const uuid = require('uuid/v4');
 require('dotenv').config();
 
@@ -73,7 +74,7 @@ User.hasMany(Score, {foreignKey: 'userid'});
 Card.hasMany(Score, {foreignKey: 'wordid'});
 
 
-
+//
 // Conn.sync({force: true}).then(() => {
 //
 //  User.create({
@@ -87,30 +88,14 @@ Card.hasMany(Score, {foreignKey: 'wordid'});
 //     admin: false
 //   });
 //
-//   _.times(2, ()=>{
-//     return User.create({
-//       username: Faker.internet.userName(),
-//       password: md5(Faker.internet.password()),
-//       admin: false
-//     });
-//   });
+//   WORD_ARR.map((v, i)=>{
 //
-//   let wordArr = [
-//                   {"french":"aller","english":"to go","wordType":"verb"},
-//                   {"french":"vouloir","english":"to want","wordType":"verb"},
-//                   {"french":"etre","english":"to be","wordType":"verb"},
-//                   {"french":"une tasse","english":"a cup","wordType":"noun"},
-//                   {"french":"un stylo","english":"a pen","wordType":"noun"}
-//                 ];
-//
-//   wordArr.map((v, i)=>{
 //     return Card.create({
 //       french: v.french,
 //       english: v.english,
 //       wordType: v.wordType
 //     });
 //   });
-//
 //
 // });
 

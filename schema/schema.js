@@ -7,6 +7,7 @@ import {  GraphQLObjectType,
           GraphQLList,
           GraphQLSchema,
           GraphQLNonNull } from 'graphql';
+import GraphQLLong from 'graphql-type-long';
 import Db from './db';
 import md5 from 'md5';
 
@@ -90,6 +91,12 @@ const AuthData = new GraphQLObjectType({
           return auth.userid
         }
       },
+        username: {
+          type: GraphQLString,
+          resolve(auth) {
+            return auth.username
+          }
+        },
       admin: {
         type: GraphQLBoolean,
         resolve(auth) {
@@ -103,7 +110,7 @@ const AuthData = new GraphQLObjectType({
         }
       },
       tokenExpiration: {
-        type: GraphQLString,
+        type: GraphQLLong,
         resolve(auth) {
           return auth.tokenExpiration
         }
@@ -219,6 +226,43 @@ const Query = new GraphQLObjectType({
         }
       },
 
+      scores: {
+        type: new GraphQLList(Score),
+        args: {
+          userid: {
+            type: new GraphQLNonNull(GraphQLID)
+          },
+          wordid: {
+            type: new GraphQLNonNull(GraphQLID)
+          }
+        },
+        resolve(_, args, req) {
+
+          if(!req.isLoggedIn && !req.isAdmin){
+            throw new Error('Not logged in!')
+          }
+
+          return Db.models.score.findAll({where: args})
+        }
+      },
+
+      users: {
+        type: new GraphQLList(User),
+        args: {
+          username: {
+            type: GraphQLString
+          }
+        },
+        resolve(_, args, req) {
+
+          if(!req.isAdmin){
+            throw new Error('Unauthorised!')
+          }
+
+          return Db.models.user.findAll({where: args});
+        }
+      },
+
       userLogin: {
         type: AuthData,
         args: {
@@ -243,54 +287,62 @@ const Query = new GraphQLObjectType({
                                     admin: user.admin,
                                     },
                                     stringHash,
-                                    { expiresIn: '1h' }
+                                    { expiresIn: '1d' }
                                   );
+                    let tokenExp = new Date();
+                    tokenExp.setDate(tokenExp.getDate()+1);
 
                     return {
                               userid: user._id,
+                              username: user.username,
                               admin: user.admin,
                               token: token,
-                              tokenExpiration: 1
+                              tokenExpiration: Date.parse(tokenExp)
                             };
 
           });
         }
       },
-
-      users: {
-        type: new GraphQLList(User),
-        args: {
-          username: {
-            type: GraphQLString
-          }
-        },
-        resolve(_, args, req) {
-
-          if(!req.isAdmin){
-            throw new Error('Unauthorised!')
-          }
-
-          return Db.models.user.findAll({where: args});
-        }
-      },
-
-      scores: {
-        type: new GraphQLList(Score),
+      //create new auth token if logged in within valid timeframe of last token
+      authTokenValidate: {
+        type: AuthData,
         args: {
           userid: {
             type: new GraphQLNonNull(GraphQLID)
-          },
-          wordid: {
-            type: new GraphQLNonNull(GraphQLID)
           }
         },
         resolve(_, args, req) {
-
           if(!req.isLoggedIn && !req.isAdmin){
             throw new Error('Not logged in!')
           }
 
-          return Db.models.score.findAll({where: args})
+          return Db.models.user.findOne({ where: { _id: args.userid }})
+          .then(user => {
+
+            if(!user) throw new Error("Not logged in.");
+
+            const stringHash = user.admin ? process.env.ADMIN_TOKEN : process.env.NORMIE_TOKEN;
+
+            const token = jwt.sign( {
+                                    userid: user._id,
+                                    username: user.username,
+                                    admin: user.admin,
+                                    },
+                                    stringHash,
+                                    { expiresIn: '1d' }
+                                  );
+            let tokenExp = new Date();
+            tokenExp.setDate(tokenExp.getDate()+1);
+
+                    return {
+                              userid: user._id,
+                              username: user.username,
+                              admin: user.admin,
+                              token: token,
+                              tokenExpiration: Date.parse(tokenExp)
+                            };
+
+          });
         }
       }
     }

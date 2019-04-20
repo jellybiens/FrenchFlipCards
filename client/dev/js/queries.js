@@ -6,6 +6,7 @@ export const ALL_CARDS_QUERY = gql`
           _id
           french
           english
+          wordType
       }
     }
     `;
@@ -16,6 +17,7 @@ export const FOCUSS_CARDS_QUERY = gql`
           _id
       	  french
           english
+          wordType
       }
     }
     `;
@@ -41,6 +43,19 @@ export const USER_LOGIN = gql`
     query userLogin($username: String!, $password: String!){
       userLogin(username: $username, password: $password) {
         userid
+        username
+        admin
+        token
+        tokenExpiration
+      }
+    }
+    `;
+
+export const AUTH_TOKEN_VALIDATE = gql`
+    query authTokenValidate($userid: ID!){
+      authTokenValidate(userid: $userid) {
+        userid
+        username
         admin
         token
         tokenExpiration

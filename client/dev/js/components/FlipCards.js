@@ -15,15 +15,14 @@ export class FlipCards extends Component {
   constructor(){
     super();
       this.state = {
-          goBack: false,
-          endOfStackMsg: "End of stack"
+          goBack: false
       }
   }
 
   buildCards(loading, error, data, frontFace){
     if(loading) return <h2>Loading...</h2>
     if(error) {console.log(error); this.context.signout(); return <Redirect to="/" />}
-    if(data.cards.length === 0) this.setState({goBack: true, endOfStackMsg: "No cards found!"});
+    if(data.cards.length === 0) return <NavLink to="/MainMenu"><button className="end-of-stack">No cards found!</button></NavLink>
       return <Fragment>
       {
           data.cards.map((card, i) => {
@@ -61,7 +60,7 @@ export class FlipCards extends Component {
         {query}
           <div className="correct-box"><span>Je sais cela!</span></div>
           <div className="wrong-box"><span>J'en ai aucune idée...</span></div>
-          {this.state.goBack && <NavLink to="/MainMenu"><button className="end-of-stack">{this.state.endOfStackMsg}</button></NavLink>}
+          {this.state.goBack && <NavLink to="/MainMenu"><button className="end-of-stack">End of stack</button></NavLink>}
       </div>
     );
   }

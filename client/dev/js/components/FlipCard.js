@@ -144,20 +144,31 @@ export class FlipCard extends Component {
 
 render(){
 
+    let english = this.props.card.english;
+    let french = this.props.card.french;
+    let wordType = this.props.card.wordType;
+    // /((?<!\S)[\u00E0](?!\S)|\bde\b|\bse\b|\bs')/g
+    const àgex = /((?<!\S)[\u00E0](?!\S))/g;
+    const degex = /(\bde\b)/g;
+    const segex = /(\bse\b|\bs')/g;
+    french = french.replace(àgex, '<b class="redA">$1</b>');
+    french = french.replace(degex, '<b class="blueDE">$1</b>');
+    french = french.replace(segex, '<b class="orangeSE">$1</b>');
 
     let cardid = this.props.card._id;
-    let frontWord = this.props.frontFace === "english" ? this.props.card.english : this.props.card.french;
-    let backWord = this.props.frontFace === "english" ? this.props.card.french : this.props.card.english;
+    let frontWord = this.props.frontFace === "english" ? english : french;
+    let backWord = this.props.frontFace === "english" ? french : english;
+
 
     return (
       <div className="card" onClick={() => this.flipCard()} id={cardid}>
         <div className="flip-container">
           <div className={!this.state.flip ? "flipper" : "flipper flipped"}>
-            <div className="front">
-              <span>{frontWord}</span>
+            <div className={"front " + wordType + "-card"}>
+              <span dangerouslySetInnerHTML={{ __html: frontWord }}></span>
             </div>
-            <div className="back">
-              <span>{backWord}</span>
+            <div className={"back " + wordType + "-card"}>
+              <span dangerouslySetInnerHTML={{ __html: backWord }}></span>
             </div>
           </div>
         </div>

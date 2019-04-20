@@ -1,7 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { BrowserRouter, Route, Redirect, Switch  } from 'react-router-dom';
 
+import { ApolloConsumer } from 'react-apollo';
 import AuthContext from '../context/auth-context';
+
+import { Query } from 'react-apollo';
+import { AUTH_TOKEN_VALIDATE } from './queries.js';
 
 import AuthPage from './components/AuthPage';
 import MainMenu from './components/MainMenu';
@@ -9,30 +13,55 @@ import FlipCards from './components/FlipCards';
 import AddWords from './components/AddWords';
 
 
+//TODO //
+//don't cache flipcard responses
+//or shuffle the cards
+
+
 class App extends Component {
 
   static contextType = AuthContext;
 
   constructor(){
+    //get current time
+    const now = new Date();
+    const blankToken = { token: null, userid: null, admin: null, tokenExpiration: null, refresh: false };
 
-    const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token"))
-                : {
-                  token:  null,
-                  userid: null,
-                  admin: false,
-                  tokenExpiration: null
-                };
+    //is there a token in localstorage?
+    let token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : blankToken;
 
+    //if there is, is it still valid?
+    if(token.token)
+    {
+      console.log(token.tokenExpiration > now.getTime());
+      console.log(new Date(token.tokenExpiration));
+      console.log(now);
+      token = token.tokenExpiration > now.getTime() ?
+                { //if still valid, lets create a new token session with refresh
+                  token: token.token,
+                  userid: token.userid,
+                  admin: token.admin,
+                  tokenExpiration: token.tokenExpiration,
+                  refresh: true
+                } : blankToken //if it is not still in date, lets get them to log back in again
+    }
+    console.log("run constructor");
+    console.log("token");
+    console.log(token);
+
+    //lets assign all this to the state
     super();
       this.state = {
-        token: token.token || null,
-        userid: token.userid ||  null,
-        admin: token.admin ||  false,
-        tokenExpiration: token.tokenExpiration || null
+        token: token.token,
+        userid: token.userid,
+        admin: token.admin,
+        tokenExpiration: token.tokenExpiration,
+        refresh: token.refresh
       }
   }
 
   sessionlogin = (token, userid, admin, tokenExpiration) => {
+
 
     const tokenObj = { token: token, userid: userid, admin: admin, tokenExpiration: tokenExpiration };
 
@@ -42,7 +71,8 @@ class App extends Component {
       token: token,
       userid: userid,
       admin: admin,
-      tokenExpiration: tokenExpiration
+      tokenExpiration: tokenExpiration,
+      refresh: false
     });
   }
 
@@ -54,13 +84,31 @@ class App extends Component {
       token: null,
       userid: null,
       admin: false,
-      tokenExpiration: null
+      tokenExpiration: null,
+      refresh: false
     });
+
+    //client.resetStore();
   }
 
   render() {
 
     let token = this.state.token;
+    let userid = this.state.userid;
+    let refresh = this.state.refresh;
+
+    //if we have a token and it is still valid, lets refresh its log out time and instantly log the user in below
+    if(token && refresh) return (<Query query={AUTH_TOKEN_VALIDATE} variables={{ userid }} >
+                       {({loading, error, data}) => {
+                         if(loading){ console.log("loading"); return <Fragment></Fragment>; }
+                         if(error){ this.sessionsignout(); return <Fragment></Fragment>; }
+                         if(data){ this.sessionlogin(data.authTokenValidate.token,
+                                                      data.authTokenValidate.userid,
+                                                      data.authTokenValidate.admin,
+                                                      data.authTokenValidate.tokenExpiration); return <Fragment></Fragment>; }
+                          }
+                       }
+                     </Query>);
 
     return (
 
@@ -74,7 +122,11 @@ class App extends Component {
                                   }}>
 
         <div className="App">
-            {token && <div className="sign-out"><button onClick={()=> this.sessionsignout()}>Sign Out</button></div>}
+            {token &&
+              <ApolloConsumer>{client =>
+                  (<div className="sign-out"><button onClick={()=> this.sessionsignout()}>Sign Out</button></div>)
+              }</ApolloConsumer>
+            }
             <Switch>
 
               {!token && <Redirect path="/" to="/AuthPage" exact />}

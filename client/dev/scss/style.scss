@@ -1,3 +1,23 @@
+
+$bg-colour: #99ebff;
+$main-blue: #01d1d1;
+$dark-blue2: darken($main-blue, 2%);
+$dark-blue10: darken($main-blue, 10%);
+$dark-blue15: darken($main-blue, 15%);
+$dark-blue20: darken($main-blue, 20%);
+$dark-blue25: darken($main-blue, 25%);
+
+$light-blue: lighten($main-blue, 50%);
+$light-red: adjust-hue($light-blue, 180%);
+$light-purp: adjust-hue($light-blue, 90%);
+$light-yellow: adjust-hue($light-blue, 270%);
+
+$pos-msg: #00cc00;
+$neg-msg: #ff0000;
+$pos-msg-dark: darken($pos-msg, 30%);
+$neg-msg-dark: darken($neg-msg, 30%);
+
+
 * {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -17,6 +37,14 @@ html, body, #root {
 
 }
 
+@mixin browserSupport($propName, $propVar){
+	-webkit-#{$propName}: $propVar;
+	-khtml-#{$propName}: $propVar;
+	-moz-#{$propName}: $propVar;
+	-ms-#{$propName}: $propVar;
+	#{$propName}: $propVar;
+}
+
 @mixin absolute-positioning($height, $width, $top, $left){
   height:$height;
   width:$width;
@@ -24,29 +52,29 @@ html, body, #root {
   left:$left;
 }
 
+%div{
+  position:relative;
+  width:100%;
+  height:90vh;
+  top:0%;
+  left:0%;
+  overflow:hidden;
+
+}
+
 .App{
-  background-color:#99ebff;
+  background-color:$bg-colour;
   margin:auto;
   width:100%;
   height:100%;
   max-width:750px;
 
-  %div{
-    position:relative;
-    width:100%;
-    height:90vh;
-    top:0%;
-    left:0%;
-    overflow:hidden;
-
-  }
-
   %button{
     button{
       position:absolute;
       text-align: center;
-      background: #01d1d1;
-      border: 1px solid #01d1d1;
+      background: $main-blue;
+      border: 1px solid $main-blue;
       border-radius: 3px;
       box-sizing:border-box;
       box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
@@ -54,8 +82,8 @@ html, body, #root {
       cursor: pointer;
     }
     button:active{
-      background: darken(#01a7a7, 20%);
-      border-color: darken(#01a7a7, 25%);
+      background: $dark-blue20;
+      border-color: $dark-blue25;
     }
   }
 
@@ -95,7 +123,7 @@ html, body, #root {
     }
   }
 
-  .AuthPage{
+  .auth-page{
     @extend %div;
 
     form{
@@ -114,8 +142,8 @@ html, body, #root {
       button{font-size: 1.5em;}
       .errorMessage{
         font-size: 110%;
-        color:#ff0000;
-        text-shadow: 0px 0px 2px #770000;
+        color:$neg-msg;
+        text-shadow: 0px 0px 2px $neg-msg-dark;
 
         span{
           position:relative;
@@ -149,6 +177,7 @@ html, body, #root {
       display:flex;
       span{
         position:absolute;
+        width: 100%;
         top:50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -156,8 +185,8 @@ html, body, #root {
       div{
         position:relative;
         text-align: center;
-        background: #01d1d1;
-        border: 1px solid darken(#01a7a7, 2%);
+        background: $main-blue;
+        border: 1px solid $dark-blue2;
         border-radius: 5px;
         box-sizing:border-box;
         box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
@@ -171,27 +200,29 @@ html, body, #root {
         }
       }
       .active{
-        background: darken(#01a7a7, 10%);
-        border-color: darken(#01a7a7, 15%);
+        background: $dark-blue10;
+        border-color: $dark-blue15;
         box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         border-width: 5px;
         color: #ffffff;
         font-weight: bolder;
       }
       div:active{
-        background: darken(#01a7a7, 20%);
-        border-color: darken(#01a7a7, 25%);
+        background: $dark-blue20;
+        border-color: $dark-blue25;
         color: #ffffff;
       }
     }
 
     .cards-types-header{  @include absolute-positioning(5%, 100%, 0, 0); }
-    .cards-types-options{ @include absolute-positioning(20%, 100%, 0, 0); }
+    .cards-types-options{ @include absolute-positioning(18%, 100%, 0, 0); }
     .cards-focus-header{  @include absolute-positioning(2%, 100%, 3%, 0); }
-    .cards-focus-options{ @include absolute-positioning(20%, 96%, 0, 2%); }
+    .cards-focus-options{ @include absolute-positioning(18%, 96%, 0, 2%); }
     .cards-front-header{  @include absolute-positioning(2%, 100%, 3%, 0); }
-    .cards-front-options{ @include absolute-positioning(20%, 96%, 0, 2%); }
-    .confirm-options{     @include absolute-positioning(25%, 96%, 0, 2%); }
+    .cards-front-options{ @include absolute-positioning(18%, 96%, 0, 2%); }
+    .cards-limit-header{  @include absolute-positioning(2%, 100%, 3%, 0); }
+    .cards-limit-options{ @include absolute-positioning(15%, 96%, 0, 2%); }
+    .confirm-options{     @include absolute-positioning(20%, 96%, 0, 2%); }
 
     .cards-types-options{
       div{
@@ -246,6 +277,30 @@ html, body, #root {
       }
     }
 
+    .cards-limit-options{
+      $opt-width: 25%;
+      $opt-left: 0;
+
+      .opt-10{
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+      .opt-25{
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
+        border-radius:0;
+      }
+      .opt-50{
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
+        border-radius:0;
+      }
+      .opt-100{
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+      }
+    }
+
     .confirm-options{
       @extend %button;
       button{ @include absolute-positioning(70%, 70%, 15%, 15%); }
@@ -272,17 +327,17 @@ html, body, #root {
 
     .left-gradient{
       left:-25%;
-      background: radial-gradient(ellipse at center, rgba(255,25,25,1) 15%,rgba(255,25,25,0) 85%,rgba(255,25,25,0) 100%);
+      background: radial-gradient(ellipse at center, $neg-msg 15%,rgba(255,25,25,0) 85%,rgba(255,25,25,0) 100%);
     }
     .right-gradient{
       left:75%;
-      background: radial-gradient(ellipse at center, rgba(25,255,25,1) 15%,rgba(25,255,25,0) 85%,rgba(25,255,25,0) 100%);
+      background: radial-gradient(ellipse at center, lighten($pos-msg, 15%) 15%,rgba(25,255,25,0) 85%,rgba(25,255,25,0) 100%);
     }
     .correct-box{
-      color: rgba(25,125,25,1);
+      color: lighten($pos-msg, 15%);
     }
     .wrong-box{
-      color: rgba(125,25,25,1);
+      color: $neg-msg-dark;
     }
     .correct-box, .wrong-box{
       transition: 0.2s;
@@ -290,7 +345,7 @@ html, body, #root {
       position:absolute;
       height:20%;
       width:100%;
-      top:80%;
+      top:62%;
       left:0%;
       opacity:0;
       box-sizing:border-box;
@@ -304,17 +359,70 @@ html, body, #root {
         top:50%;
         transform: translate(-50%, -50%);
       }
+    }
+
+    .swipe-buttons{
+      position: absolute;
+      height: 20%;
+      top: 78%;
+      width: 100%;
+      z-index:4;
+
+      .button-left, .button-right{
+        position: absolute;
+        height: 100%;
+        width: 50%;
+      }
+      .button-right{
+        left:50%;
+      }
+        img{
+          display:flex;
+          margin:auto;
+          height:100%;
+          width:auto;
+
+      }
+
+
+      .button-left:active, .button-right:active{
+        img{
+          filter: brightness(50%);
+          transform: scale(0.95);
+        }
+      }
+
 
     }
 
     @extend %button;
     .end-of-stack{ @include absolute-positioning(20%, 40%, 40%, 30%); }
 
+    @keyframes swipeRight{
+      0% { @include browserSupport(transform, rotateZ(0deg) translateX(0%) translateY(0%)); }
+      100%{ @include browserSupport(transform, rotateZ(50deg) translateX(300%) translateY(-100%)); }
+    }
+    @keyframes swipeLeft{
+      0% { @include browserSupport(transform, rotateZ(0deg) translateX(0%) translateY(0%)); }
+      100%{ @include browserSupport(transform, rotateZ(-50deg) translateX(-300%) translateY(-100%)); }
+    }
+
+    .swipeRight{
+      @include browserSupport(animation, swipeRight linear);
+      @include browserSupport(animation-duration, 0.7s);
+      @include browserSupport(transform, rotateZ(50deg) translateX(300%) translateY(-100%));
+    }
+    .swipeLeft{
+      @include browserSupport(animation, swipeLeft linear);
+      @include browserSupport(animation-duration, 0.7s);
+      @include browserSupport(transform, rotateZ(-50deg) translateX(-300%) translateY(-100%));
+    }
+
     .card{
       position:absolute;
       height:40%;
       width:80%;
-      top:30%;
+      top:25%;
       left:10%;
 
       .flip-container {
@@ -335,20 +443,19 @@ html, body, #root {
         	position: absolute;
           overflow: visible;
 
-          .verb-card { background-color: adjust-hue(lighten(#01d1d1, 50%), 90%); }
-          .noun-card { background-color: adjust-hue(lighten(#01d1d1, 50%), 180%); }
-          .adj-card  { background-color: adjust-hue(lighten(#01d1d1, 50%), 270%); }
+          .verb-card { background-color: $light-purp; }
+          .noun-card { background-color: $light-red; }
+          .adj-card  { background-color: $light-yellow; }
 
           .front, .back {
             position: absolute;
           	width: 90%;
           	height: 90%;
           	backface-visibility: hidden;
-
+            cursor:pointer;
           	top: 5%;
           	left: 5%;
 
-            //background-color: adjust-hue(lighten(#01d1d1, 35%), 25%);
             border: 3px solid #000000;
             border-radius: 10px;
             box-sizing:border-box;
@@ -405,8 +512,8 @@ html, body, #root {
       button{font-size: 1.5em;}
       .errorMessage, .resMessage{
         font-size: 120%;
-        color:#ff0000;
-        text-shadow: 0px 0px 2px #770000;
+        color:$neg-msg;
+        text-shadow: 0px 0px 2px $neg-msg-dark;
 
         span{
           position:relative;
@@ -415,8 +522,8 @@ html, body, #root {
         }
       }
       .resMessage{
-        color:#00cc00;
-        text-shadow: 0px 0px 2px #004400;
+        color:$pos-msg;
+        text-shadow: 0px 0px 2px $pos-msg-dark;
       }
       @extend %button;
 
@@ -450,8 +557,8 @@ html, body, #root {
         div{
           position:relative;
           text-align: center;
-          background: #01d1d1;
-          border: 1px solid darken(#01a7a7, 2%);
+          background: $main-blue;
+          border: 1px solid $dark-blue2;
           border-radius: 5px;
           box-sizing:border-box;
           box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
@@ -465,25 +572,138 @@ html, body, #root {
           }
         }
         .active{
-          background: darken(#01a7a7, 10%);
-          border-color: darken(#01a7a7, 15%);
+          background: $dark-blue10;
+          border-color: $dark-blue15;
           box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
           border-width: 5px;
           color: #ffffff;
           font-weight: bolder;
         }
         div:active{
-          background: darken(#01a7a7, 20%);
-          border-color: darken(#01a7a7, 25%);
+          background: $dark-blue20;
+          border-color: $dark-blue25;
           color: #ffffff;
         }
       }
-
-
-
     }
   }
+}
 
 
+.loading-flipper{
+  $ani-dur: 3s;
+  position:absolute;
+  height: 40%;
+  width: 40%;
+  top: 25%;
+  left: 30%;
+
+    @keyframes loadingflip{
+      0% { @include browserSupport(transform, rotateX(0deg) rotateY(0deg)); }
+      12%{ @include browserSupport(transform, rotateX(0deg) rotateY(180deg)); }
+      24%{ @include browserSupport(transform, rotateX(0deg) rotateY(180deg)); }
+      36%{ @include browserSupport(transform, rotateX(180deg) rotateY(180deg)); }
+      40%{ @include browserSupport(transform, rotateX(180deg) rotateY(180deg)); }
+      61%{ @include browserSupport(transform, rotateX(180deg) rotateY(360deg)); }
+      65%{ @include browserSupport(transform, rotateX(180deg) rotateY(360deg)); }
+      86%{ @include browserSupport(transform, rotateX(360deg) rotateY(360deg)); }
+      90%{ @include browserSupport(transform, rotateX(360deg) rotateY(360deg)); }
+      100%{ @include browserSupport(transform, rotateX(360deg) rotateY(360deg)); }
+      }
+
+    @keyframes frontcolour{
+      0% { background-color: $light-blue; } //front
+      12%{ background-color: $light-blue; } //front
+      13%{ background-color: $light-red; } //back
+      62%{ background-color: $light-red; } //front
+      63%{ background-color: $light-blue; } //back
+      100%{ background-color: $light-blue; } //back
+    }
+    @keyframes frontspan{
+      0% { @include browserSupport(transform, translate(-50%, -50%) scale(1, 1)); } //front
+      12%{  @include browserSupport(transform, translate(-50%, -50%) scale(1, 1)); } //front
+      13%{ @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1)); } //back
+      62%{  @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1)); } //front
+      63%{ @include browserSupport(transform, translate(-50%, -50%) scale(1, 1)); } //back
+      100%{ @include browserSupport(transform, translate(-50%, -50%) scale(1, 1)); } //back
+    }
+
+    @keyframes backcolour{
+      0% { background-color: $light-purp; } //back
+      49% { background-color: $light-purp; } //back
+      50%{ background-color: $light-yellow; } //front
+      100%{ background-color: $light-yellow; } //front
+    }
+    @keyframes backspan{
+      0% { @include browserSupport(transform, translate(-50%, -50%) scale(1, 1));  } //back
+      49% {  @include browserSupport(transform, translate(-50%, -50%) scale(1, 1));  } //back
+      50%{  @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1));  } //front
+      100%{  @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1));  } //front
+    }
+
+  .flip-container {
+    position:absolute;
+    height: 100%;
+    width: 100%;
+    perspective: 1000px;
+
+    .flipper {
+      @include browserSupport(animation, loadingflip infinite linear);
+      @include browserSupport(animation-duration, $ani-dur);
+
+      @extend %div;
+      height:100% !important;
+      width:100% !important;
+      transform-style: preserve-3d;
+      position: absolute;
+      overflow: visible !important;
+
+      .front, .back {
+        position: absolute;
+        width: 100%;
+        height: 50%;
+        backface-visibility: hidden;
+
+        top: 25%;
+        left: 0%;
+
+        border: 3px solid #000000;
+        border-radius: 10px;
+        box-sizing:border-box;
+        color: #111111;
+
+        text-align: center;
+        font-size: 100%;
+
+        span{
+          position:absolute;
+          width: 90%;
+          top:50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      .front {
+        z-index: 2;
+        transform: rotateY(0deg);
+        @include browserSupport(animation, frontcolour infinite linear);
+        @include browserSupport(animation-duration, $ani-dur);
+        span{
+          @include browserSupport(animation, frontspan infinite linear);
+          @include browserSupport(animation-duration, $ani-dur);
+        }
+      }
+
+      .back {
+        @include browserSupport(transform, rotateY(180deg));
+        @include browserSupport(animation, backcolour infinite linear);
+        @include browserSupport(animation-duration, $ani-dur);
+        span{
+          @include browserSupport(animation, backspan infinite linear);
+          @include browserSupport(animation-duration, $ani-dur);
+        }
+      }
+    }
+  }
 
 }

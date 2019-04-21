@@ -7,6 +7,7 @@ import AuthContext from '../context/auth-context';
 import { Query } from 'react-apollo';
 import { AUTH_TOKEN_VALIDATE } from './queries.js';
 
+import LoadingFlipper from './components/LoadingFlipper'
 import AuthPage from './components/AuthPage';
 import MainMenu from './components/MainMenu';
 import FlipCards from './components/FlipCards';
@@ -33,9 +34,6 @@ class App extends Component {
     //if there is, is it still valid?
     if(token.token)
     {
-      console.log(token.tokenExpiration > now.getTime());
-      console.log(new Date(token.tokenExpiration));
-      console.log(now);
       token = token.tokenExpiration > now.getTime() ?
                 { //if still valid, lets create a new token session with refresh
                   token: token.token,
@@ -45,9 +43,6 @@ class App extends Component {
                   refresh: true
                 } : blankToken //if it is not still in date, lets get them to log back in again
     }
-    console.log("run constructor");
-    console.log("token");
-    console.log(token);
 
     //lets assign all this to the state
     super();
@@ -100,7 +95,7 @@ class App extends Component {
     //if we have a token and it is still valid, lets refresh its log out time and instantly log the user in below
     if(token && refresh) return (<Query query={AUTH_TOKEN_VALIDATE} variables={{ userid }} >
                        {({loading, error, data}) => {
-                         if(loading){ console.log("loading"); return <Fragment></Fragment>; }
+                         if(loading){ return <Fragment><LoadingFlipper /></Fragment>; }
                          if(error){ this.sessionsignout(); return <Fragment></Fragment>; }
                          if(data){ this.sessionlogin(data.authTokenValidate.token,
                                                       data.authTokenValidate.userid,
@@ -142,6 +137,7 @@ class App extends Component {
               <Route path="/AddWords" component={AddWords} />
 
             </Switch>
+            
         </div>
 
         </AuthContext.Provider>

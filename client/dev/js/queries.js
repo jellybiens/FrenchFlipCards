@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const ALL_CARDS_QUERY = gql`
-    query CardsQuery($wordType: [String] = ["noun", "adj", "verb"]) {
-      cards: cardsAll(wordType: $wordType) {
+    query CardsQuery($wordType: [String] = ["noun", "adj", "verb"], $limit: Int) {
+      cards: cardsAll(wordType: $wordType, limit: $limit) {
           _id
           french
           english
@@ -12,8 +12,8 @@ export const ALL_CARDS_QUERY = gql`
     `;
 
 export const FOCUSS_CARDS_QUERY = gql`
-    query FocussQuery($userid: ID!, $wordType: [String] = ["noun", "adj", "verb"]){
-      cards: cardsFocussed(userid: $userid, wordType: $wordType) {
+    query FocussQuery($userid: ID!, $wordType: [String] = ["noun", "adj", "verb"], $limit: Int){
+      cards: cardsFocussed(userid: $userid, wordType: $wordType, limit: $limit) {
           _id
       	  french
           english

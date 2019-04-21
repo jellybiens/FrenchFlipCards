@@ -166,6 +166,9 @@ const Query = new GraphQLObjectType({
           },
           wordType: {
             type: new GraphQLList(GraphQLString)
+          },
+          limit: {
+            type: GraphQLInt
           }
         },
         resolve(_, args, req) {
@@ -174,7 +177,7 @@ const Query = new GraphQLObjectType({
             throw new Error('Not logged in!')
           }
 
-          return Db.models.card.findAll({where: args, order: Sequelize.literal('random()')})
+          return Db.models.card.findAll({where: { wordType: args.wordType}, order: Sequelize.literal('random()'), limit: args.limit})
         }
       },
 
@@ -187,6 +190,9 @@ const Query = new GraphQLObjectType({
           },
           userid: {
             type: new GraphQLNonNull(GraphQLID)
+          },
+          limit: {
+            type: GraphQLInt
           }
         },
 
@@ -218,7 +224,8 @@ const Query = new GraphQLObjectType({
                                 FROM "scores"
                                 WHERE userid = '${args.userid}')
             AND "wordType" IN (${wordTypes})) AS Cards
-            ORDER BY random();
+            ORDER BY random()
+            LIMIT ${args.limit};
             `, {
               model: Db.models.card,
               mapToModel: true

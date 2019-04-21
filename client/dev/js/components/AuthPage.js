@@ -89,7 +89,7 @@ export class AuthPage extends Component {
     return (
       <ApolloConsumer>
         {client => (
-          <div className="AuthPage">
+          <div className="auth-page">
             <form>
 
               <input type="text" id="username" ref={this.usernameEl} placeholder="username" />

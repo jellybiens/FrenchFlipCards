@@ -13,6 +13,7 @@ export class MainMenu extends Component {
         wordType: [],
         focussed: "all",
         frontFace: "both",
+        limit: 25,
         onyva: false
       }
   }
@@ -34,8 +35,9 @@ export class MainMenu extends Component {
     let wordType = this.state.wordType;
     let focussed = this.state.focussed;
     let frontFace = this.state.frontFace;
+    let limit = this.state.limit;
 
-    if(this.state.onyva) return <Redirect to={{pathname:"/FlipCards", state:{ wordType: wordType, focussed: focussed, frontFace: frontFace }}} />
+    if(this.state.onyva) return <Redirect to={{pathname:"/FlipCards", state:{ wordType: wordType, focussed: focussed, frontFace: frontFace, limit: limit }}} />
 
     return (
       <Fragment>
@@ -94,6 +96,34 @@ export class MainMenu extends Component {
           </div>
 
         </div>
+
+
+        <div className="cards-limit-header"><span>TOTAL CARDS LIMIT</span></div>
+        <div className="cards-limit-options">
+          <div className={limit === 10 ? "opt-10 active" : "opt-10"}
+               onClick={() => this.setState({limit: 10})}
+              >
+            <span>10</span>
+          </div>
+          <div className={limit === 25 ? "opt-25 active" : "opt-25"}
+               onClick={() => this.setState({limit: 25})}
+              >
+            <span>25</span>
+          </div>
+          <div className={limit === 50 ? "opt-50 active" : "opt-50"}
+               onClick={() => this.setState({limit: 50})}
+              >
+            <span>50</span>
+          </div>
+          <div className={limit === 100 ? "opt-100 active" : "opt-100"}
+               onClick={() => this.setState({limit: 100})}
+              >
+            <span>100</span>
+          </div>
+
+        </div>
+
+
 
         <div className="confirm-options">
           <button onClick={() => this.setState({onyva: true})}>ON Y VA!</button>

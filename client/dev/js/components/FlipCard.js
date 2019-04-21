@@ -5,6 +5,7 @@ import { Mutation } from 'react-apollo';
 import { UPDATE_SCORE_POS, UPDATE_SCORE_NEG } from '../queries.js';
 
 const Swing = require('swing');
+import { destroyCard, disableSwipe } from './destroyCard';
 
 
 export class FlipCard extends Component {
@@ -53,19 +54,8 @@ export class FlipCard extends Component {
 
     stack.on('throwout', (event) => {
 
-      if(event.throwDirection == Swing.Direction.RIGHT){
-        event.target.querySelector('.submitPos').dispatchEvent(new Event('submit'));
-      }
-      else if(event.throwDirection == Swing.Direction.LEFT){
-        event.target.querySelector('.submitNeg').dispatchEvent(new Event('submit'));
-      }
-
-      let parent = event.target.parentNode
-
-      let card = stack.getCard(event.target)
-      card.destroy();
-      event.target.remove()
-      if(parent.childElementCount === 5) this.props.endofstack();
+      const dir = event.throwDirection == Swing.Direction.RIGHT ? true : false;
+      if(destroyCard(dir, true)) this.props.endofstack();
 
     });
 
@@ -122,19 +112,13 @@ export class FlipCard extends Component {
 
 
     const checkKey = (e) => {
-      // if (e.keyCode == '37') { //leftArr
-      //   //card.throwOut(10, 4);
-      // }
-      // else if (e.keyCode == '39') {//rightArr
-      //   //card.throwOut(1, 0);
-      // }
-      // else
-      if (e.keyCode == '32') {//spaceBar
+      if (e.keyCode == '37' || e.keyCode == '39') { //leftArr
+        const dir = e.keyCode == '39' ? true : false;
+        if(destroyCard(dir, false)) this.props.endofstack();
+      }
+      else if (e.keyCode == '32') {//spaceBar
         e = e || window.event;
-        const topCard = document.querySelector('.card:last-child');
-        const card = stack.getCard(topCard);
-        const event = new Event('click');
-        topCard.click();
+        document.querySelector('.card:last-child').click();
       }
     }
 

@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "dev": "concurrently \"npm run server\" \"npm run dev --prefix client\"",
-    "test": "babel-node server.js",
-    "build-client": "npm run build --prefix client"
+    "server": "node server.js",
+    "build": "npm run build --prefix client",
+    "heroku-postbuild": "npm run build --prefix client"
   },
   "author": "Ethan Watson",
   "license": "ISC",

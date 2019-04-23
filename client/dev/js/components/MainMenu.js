@@ -10,7 +10,7 @@ export class MainMenu extends Component {
   constructor(){
     super();
       this.state = {
-        wordType: ['noun'],
+        wordType: [],
         focussed: "all",
         frontFace: "both",
         limit: 10,

@@ -15,6 +15,7 @@ export const destroyCard = (dir, swiped) => {
     //add swipe off css animation class
     const swipeOffClass = dir ? "swipeRight" : "swipeLeft" ;
     if(!swiped) topCard.classList.add(swipeOffClass);
+    else topCard.classList.add(swipeOffClass + "Fin");
 
     setTimeout(() => {
       //destroy card

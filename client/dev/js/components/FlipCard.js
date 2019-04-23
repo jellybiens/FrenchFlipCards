@@ -133,8 +133,8 @@ render(){
     let wordType = this.props.card.wordType;
     // /((?<!\S)[\u00E0](?!\S)|\bde\b|\bse\b|\bs')/g
     const àgex = /((?<!\S)[\u00E0](?!\S))/g;
-    const degex = /(\bde\b)/g;
-    const segex = /(\bse\b|\bs')/g;
+    const degex = /((?<!\S)de(?!\S))/g;
+    const segex = /((?<!\S)se(?!\S)|\bs')/g;
     french = french.replace(àgex, '<b class="redA">$1</b>');
     french = french.replace(degex, '<b class="blueDE">$1</b>');
     french = french.replace(segex, '<b class="orangeSE">$1</b>');

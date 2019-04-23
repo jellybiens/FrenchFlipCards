@@ -303,15 +303,122 @@ html, body, #root {
 
     .confirm-options{
       @extend %button;
-      button{ @include absolute-positioning(70%, 70%, 15%, 15%); }
+      button{ @include absolute-positioning(70%, 70%, 15%, 15%); font-size: 150%;}
     }
   }
 
+  .cards_deck.tutorial-animation{
+
+    @keyframes swipeTutorial{
+      0% { @include browserSupport(transform, rotateZ(0deg) translateX(0%)); }
+      10%{ @include browserSupport(transform, rotateZ(5deg) translateX(50%)); }
+      40%{ @include browserSupport(transform, rotateZ(5deg) translateX(50%)); }
+      45%{ @include browserSupport(transform, rotateZ(0deg) translateX(0%)); }
+      50%{ @include browserSupport(transform, rotateZ(0deg) translateX(0%)); }
+      60%{ @include browserSupport(transform, rotateZ(-5deg) translateX(-50%)); }
+      90%{ @include browserSupport(transform, rotateZ(-5deg) translateX(-50%)); }
+      95%{ @include browserSupport(transform, rotateZ(0deg) translateX(0%)); }
+      100%{ @include browserSupport(transform, rotateZ(0deg) translateX(0%)); }
+    }
+    @keyframes flipTutorial{
+      0% { @include browserSupport(transform, rotateY(0deg)); }
+      4% { @include browserSupport(transform, rotateY(180deg)); }
+      96%{ @include browserSupport(transform, rotateY(180deg)); }
+      100%{ @include browserSupport(transform, rotateY(0deg)); }
+    }
+    @keyframes correctTutorial{
+      0% { opacity:0; }
+      10%{ opacity:1; }
+      40%{ opacity:1; }
+      45%{ opacity:0; }
+    }
+    @keyframes wrongTutorial{
+      50% { opacity:0; }
+      60%{ opacity:1; }
+      90%{ opacity:1; }
+      95%{ opacity:0; }
+    }
+    @keyframes buttonTutMsg{
+      0% { opacity: 0; }
+      10%{ opacity: 1; }
+      90%{ opacity: 1; }
+      95%{ opacity: 0; }
+    }
+    @keyframes button1Tut{
+      0% { filter: brightness(100%); transform: scale(1); }
+      10%{ filter: brightness(150%); transform: scale(1.2); }
+      40%{ filter: brightness(150%); transform: scale(1.2); }
+      45%{ filter: brightness(100%); transform: scale(1); }
+    }
+    @keyframes button2Tut{
+      50% { filter: brightness(100%); transform: scale(1); }
+      60%{ filter: brightness(150%); transform: scale(1.2); }
+      90%{ filter: brightness(150%); transform: scale(1.2); }
+      95%{ filter: brightness(100%); transform: scale(1); }
+    }
+
+    .card:nth-last-of-type(1){
+      @include browserSupport(animation, swipeTutorial linear);
+      @include browserSupport(animation-duration, 7s);
+      @include browserSupport(animation-delay, 1s);
+      .flip-container{.flipper{
+        transform: rotateY(180deg) !important;
+      } }
+    }
+    .right-gradient, .correct-tut{
+      @include browserSupport(animation, correctTutorial linear);
+      @include browserSupport(animation-duration, 7s);
+      @include browserSupport(animation-delay, 1s);
+    }
+
+    .left-gradient, .wrong-tut{
+      @include browserSupport(animation, wrongTutorial linear);
+      @include browserSupport(animation-duration, 7s);
+      @include browserSupport(animation-delay, 1s);
+    }
+
+    .button-tut{
+      @include browserSupport(animation, buttonTutMsg linear);
+      @include browserSupport(animation-duration, 4s);
+      @include browserSupport(animation-delay, 8s);
+    }
+
+    .swipe-buttons{
+      .button-left img{
+        @include browserSupport(animation, button1Tut linear);
+        @include browserSupport(animation-duration, 3s);
+        @include browserSupport(animation-delay, 8s);
+      }
+      .button-right img{
+        @include browserSupport(animation, button2Tut linear);
+        @include browserSupport(animation-duration, 3s);
+        @include browserSupport(animation-delay, 8s);
+      }
+    }
+  }
 
   .cards_deck{
     height:100% !important;
     top: -10vh;
     @extend %div;
+
+    .tap-gif{
+      position:absolute;
+      width:100%;
+      height:100%;
+      z-index:10;
+      img{
+        height:auto;
+        width:auto;
+        margin: 50% auto;
+        opacity: .5;
+        display:flex;
+      }
+    }
+    .tap-start-tut{
+      opacity: 1 !important;
+    }
+
     .left-gradient, .right-gradient{
         transition: 0.2s;
         transition-property: opacity;
@@ -339,7 +446,7 @@ html, body, #root {
     .wrong-box{
       color: $neg-msg-dark;
     }
-    .correct-box, .wrong-box{
+    .correct-box, .wrong-box, .tap-start-tut, .correct-tut, .wrong-tut, .button-tut{
       transition: 0.2s;
       transition-property: opacity;
       position:absolute;
@@ -352,6 +459,7 @@ html, body, #root {
       font-size: 150%;
       text-align: center;
       text-shadow: 0px 0px 2px #000000;
+      z-index: 3;
 
       span{
         position:absolute;
@@ -432,13 +540,14 @@ html, body, #root {
       	perspective: 1000px;
 
         .flipped {
-          transform: rotateY(180deg);
+          transform: rotateY(180deg) !important;
         }
 
         .flipper {
           @extend %div;
           height:100% !important;
-        	transition: 0.6s;
+        	transition: .6s;
+          transform: rotateY(0deg);
         	transform-style: preserve-3d;
         	position: absolute;
           overflow: visible;

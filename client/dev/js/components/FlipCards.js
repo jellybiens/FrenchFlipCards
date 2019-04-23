@@ -11,6 +11,7 @@ import LoadingFlipper from './LoadingFlipper';
 import { destroyCard, disableSwipe } from './destroyCard';
 import imgTick from '../../imgs/tick.png';
 import imgCross from '../../imgs/cross.png';
+import tapgif from '../../imgs/screentap.gif';
 
 export class FlipCards extends Component {
 
@@ -19,7 +20,8 @@ export class FlipCards extends Component {
   constructor(){
     super();
       this.state = {
-          goBack: false
+          goBack: false,
+          runAnimation: false
       }
   }
 
@@ -30,7 +32,7 @@ export class FlipCards extends Component {
       return <Fragment>
       {
           data.cards.map((card, i) => {
-            let langSideUp = frontFace === "both" ? (Math.floor(Math.random() * 2) == 0) ? 'french' : 'english' : frontFace;
+            let langSideUp = frontFace === "both" ? (i % 2 == 0) ? 'french' : 'english' : frontFace;
             return <FlipCard key={i} card={card} frontFace={langSideUp} final={i == data.cards.length - 1} endofstack={() => this.setState({goBack: true})} />
           })
       }
@@ -41,6 +43,35 @@ export class FlipCards extends Component {
     if(destroyCard(dir, false)) this.setState({goBack: true});
   }
 
+  destroyTutorialComponents(){
+    document.querySelector('.tap-gif').remove();
+    document.querySelector('.correct-tut').remove();
+    document.querySelector('.wrong-tut').remove();
+    document.querySelector('.button-tut').remove();
+  }
+
+  componentDidMount(){
+    if(!this.context.viewTutorial){
+      document.querySelector('.tap-gif-img').remove();
+      document.querySelector('.tap-start-tut').remove();
+      document.querySelector('.tap-gif').remove();
+      document.querySelector('.correct-tut').remove();
+      document.querySelector('.wrong-tut').remove();
+      document.querySelector('.button-tut').remove();
+    }
+  }
+
+  componentDidUpdate(){
+    if(this.state.runAnimation && this.context.viewTutorial){
+      this.context.tutorialViewed();
+      document.querySelector('.tap-gif-img').remove();
+      document.querySelector('.tap-start-tut').remove();
+      window.setTimeout(() => {
+        this.destroyTutorialComponents();
+        this.setState({runAnimation: false})
+      }, 12000);
+    }
+  }
 
   render() {
     let wordType = this.props.location.state.wordType;
@@ -63,10 +94,11 @@ export class FlipCards extends Component {
                                    ;
 
     return (
-      <div className="cards_deck">
+      <div className={this.state.runAnimation ? "cards_deck tutorial-animation" : "cards_deck"}>
         <NavLink to="/MainMenu"><div className="go-back"><button>Go Back</button></div></NavLink>
         <div className="left-gradient"></div>
         <div className="right-gradient"></div>
+        <div className="tap-gif" onClick={() => !this.state.runAnimation ? this.setState({runAnimation: true}) : {}}><img className="tap-gif-img" src={tapgif} /></div>
         {query}
 
         <div className="swipe-buttons">
@@ -79,6 +111,10 @@ export class FlipCards extends Component {
         </div>
           <div className="correct-box"><span>Je sais cela!</span></div>
           <div className="wrong-box"><span>J'en ai aucune idée...</span></div>
+          <div className="tap-start-tut"><span>Tap card to flip it</span></div>
+          <div className="correct-tut"><span>Swipe RIGHT if you know it</span></div>
+          <div className="wrong-tut"><span>Swipe LEFT if you don't</span></div>
+          <div className="button-tut"><span>Or use the corresponding buttons</span></div>
           {this.state.goBack && <NavLink to="/MainMenu"><button className="end-of-stack">End of stack</button></NavLink>}
       </div>
     );

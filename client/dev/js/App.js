@@ -51,8 +51,13 @@ class App extends Component {
         userid: token.userid,
         admin: token.admin,
         tokenExpiration: token.tokenExpiration,
-        refresh: token.refresh
+        refresh: token.refresh,
+        viewTutorial: true
       }
+  }
+
+  setTutorialViewed = () => {
+    this.setState({viewTutorial: false})
   }
 
   sessionlogin = (token, userid, admin, tokenExpiration) => {
@@ -83,7 +88,6 @@ class App extends Component {
       refresh: false
     });
 
-    //client.resetStore();
   }
 
   render() {
@@ -112,6 +116,8 @@ class App extends Component {
                                     userid: this.state.userid,
                                     admin: this.state.admin,
                                     tokenExpiration: this.state.tokenExpiration,
+                                    viewTutorial: this.state.viewTutorial,
+                                    tutorialViewed: this.setTutorialViewed,
                                     login: this.sessionlogin,
                                     signout: this.sessionsignout,
                                   }}>
@@ -137,7 +143,7 @@ class App extends Component {
               <Route path="/AddWords" component={AddWords} />
 
             </Switch>
-            
+
         </div>
 
         </AuthContext.Provider>

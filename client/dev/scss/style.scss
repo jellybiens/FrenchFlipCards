@@ -449,6 +449,7 @@ html, body, #root {
     .wrong-box{
       color: $neg-msg-dark;
     }
+    .tap-start-tut, .correct-tut, .wrong-tut{ top: 7% !important;}
     .correct-box, .wrong-box, .tap-start-tut, .correct-tut, .wrong-tut, .button-tut{
       transition: 0.2s;
       transition-property: opacity;

@@ -4,8 +4,8 @@ const path = require('path');
 const cors = require('cors');
 require('dotenv').config();
 
-import GraphHTTP from 'express-graphql';
-import Schema from './schema/schema';
+const graphqlHTTP = require('express-graphql');
+const schema = require('./schema/schema');
 const isAuth = require('./middleware/is-auth');
 
 
@@ -17,8 +17,8 @@ app.use(cors());
 
 app.use(isAuth);
 
-app.use('/graphql', GraphHTTP({
-  schema: Schema,
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
   pretty: true,
   graphiql: true,
   //context: isAuth

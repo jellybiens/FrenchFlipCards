@@ -1,15 +1,15 @@
-import Sequelize from 'sequelize';
-import {  GraphQLObjectType,
+const { Sequelize } = require('sequelize');
+const {  GraphQLObjectType,
           GraphQLID,
           GraphQLInt,
           GraphQLString,
           GraphQLBoolean,
           GraphQLList,
           GraphQLSchema,
-          GraphQLNonNull } from 'graphql';
-import GraphQLLong from 'graphql-type-long';
-import Db from './db';
-import md5 from 'md5';
+          GraphQLNonNull }  = require('graphql');
+const { GraphQLLong }  = require('graphql-type-long');
+const { Db } = require('./db');
+const md5 = require('md5');
 
 const jwt = require('jsonwebtoken');
 
@@ -489,4 +489,4 @@ const Schema = new GraphQLSchema({
   mutation: Mutation
 });
 
-export default Schema;
+module.exports = Schema;

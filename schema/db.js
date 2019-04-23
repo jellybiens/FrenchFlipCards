@@ -1,8 +1,6 @@
-import Sequelize from 'sequelize';
-import _ from 'lodash';
-import Faker from 'faker';
-import md5 from 'md5';
-import { WORD_ARR } from './dbinit';
+const { Sequelize } = require('sequelize');
+const md5 = require('md5');
+
 const uuid = require('uuid/v4');
 require('dotenv').config();
 
@@ -74,6 +72,10 @@ User.hasMany(Score, {foreignKey: 'userid'});
 Card.hasMany(Score, {foreignKey: 'wordid'});
 
 
+
+// const { WORD_ARR } = require('./dbinit');
+// import _ from 'lodash';
+// import Faker from 'faker';
 //
 // Conn.sync({force: true}).then(() => {
 //
@@ -99,4 +101,4 @@ Card.hasMany(Score, {foreignKey: 'wordid'});
 //
 // });
 
-export default Conn;
+module.exports = Conn;

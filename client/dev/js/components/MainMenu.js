@@ -10,10 +10,10 @@ export class MainMenu extends Component {
   constructor(){
     super();
       this.state = {
-        wordType: [],
+        wordType: ['noun'],
         focussed: "all",
         frontFace: "both",
-        limit: 25,
+        limit: 10,
         onyva: false
       }
   }

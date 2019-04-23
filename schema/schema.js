@@ -7,8 +7,8 @@ const {  GraphQLObjectType,
           GraphQLList,
           GraphQLSchema,
           GraphQLNonNull }  = require('graphql');
-const { GraphQLLong }  = require('graphql-type-long');
-const { Db } = require('./db');
+const GraphQLLong  = require('graphql-type-long');
+const Db = require('./db');
 const md5 = require('md5');
 
 const jwt = require('jsonwebtoken');

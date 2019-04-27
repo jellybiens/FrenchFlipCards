@@ -3,9 +3,9 @@ import { Redirect, NavLink } from 'react-router-dom';
 import { ApolloConsumer } from 'react-apollo';
 import { CREATE_CARD } from '../queries.js';
 
-
 import AuthContext from '../../context/auth-context';
 
+import Navigation from './Navigation'
 
 export class AddWords extends Component {
 
@@ -63,40 +63,43 @@ export class AddWords extends Component {
     let wordType = this.state.wordType;
 
     return (
-      <ApolloConsumer>
-        {client => (
-          <div className="add-cards">
-            <NavLink to="/MainMenu"><div className="go-back"><button>Go Back</button></div></NavLink>
-            <form>
+      <Fragment>
+      <Navigation path={this.props.location.pathname}
+                  context={this.context} />
+        <ApolloConsumer>
+          {client => (
+            <div className="add-cards">
+              <form>
 
-              <input type="text" id="french" ref={this.french} placeholder="french" />
-              <input type="text" id="english" ref={this.english} placeholder="english" />
+                <input type="text" id="french" ref={this.french} placeholder="french" />
+                <input type="text" id="english" ref={this.english} placeholder="english" />
 
-              <div className="cards-types-header"><span>WORD TYPE</span></div>
-              <div className="cards-types-options">
-                <div className={wordType !== "verb" ? "verb-opt" : "verb-opt active"}
-                     onClick={() => this.setState({wordType: "verb"})}>
-                     <span>VERB</span>
+                <div className="cards-types-header"><span>WORD TYPE</span></div>
+                <div className="cards-types-options">
+                  <div className={wordType !== "verb" ? "verb-opt" : "verb-opt active"}
+                       onClick={() => this.setState({wordType: "verb"})}>
+                       <span>VERB</span>
+                  </div>
+
+                  <div className={wordType !== "noun" ? "noun-opt" : "noun-opt active"}
+                       onClick={() => this.setState({wordType: "noun"})}>
+                       <span>NOUN</span>
+                  </div>
+
+                  <div className={wordType !== "adj" ? "adj-opt" : "adj-opt active"}
+                       onClick={() => this.setState({wordType: "adj"})}>
+                       <span>ADJECTIVE</span>
+                  </div>
                 </div>
 
-                <div className={wordType !== "noun" ? "noun-opt" : "noun-opt active"}
-                     onClick={() => this.setState({wordType: "noun"})}>
-                     <span>NOUN</span>
-                </div>
-
-                <div className={wordType !== "adj" ? "adj-opt" : "adj-opt active"}
-                     onClick={() => this.setState({wordType: "adj"})}>
-                     <span>ADJECTIVE</span>
-                </div>
-              </div>
-
-              <div className="resMessage"><span>{this.state.resMsg}</span></div>
-              <div className="errorMessage"><span>{this.state.errMsg}</span></div>
-              <button type="button" onClick={() => this.addCard(client)}>Add Card</button>
-            </form>
-          </div>
-        )}
-      </ApolloConsumer>
+                <div className="resMessage"><span>{this.state.resMsg}</span></div>
+                <div className="errorMessage"><span>{this.state.errMsg}</span></div>
+                <button type="button" onClick={() => this.addCard(client)}>Add Card</button>
+              </form>
+            </div>
+          )}
+        </ApolloConsumer>
+      </Fragment>
     );
   }
 }

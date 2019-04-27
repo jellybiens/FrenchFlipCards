@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { BrowserRouter, Route, Redirect, Switch  } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch, NavLink  } from 'react-router-dom';
 
-import { ApolloConsumer } from 'react-apollo';
 import AuthContext from '../context/auth-context';
 
 import { Query } from 'react-apollo';
@@ -52,13 +51,14 @@ class App extends Component {
         admin: token.admin,
         tokenExpiration: token.tokenExpiration,
         refresh: token.refresh,
-        viewTutorial: true
+        viewTutorial: true,
+        path: "/"
       }
   }
 
-  setTutorialViewed = () => {
-    this.setState({viewTutorial: false})
-  }
+    setTutorialViewed = () => {
+      this.setState({viewTutorial: false})
+    }
 
   sessionlogin = (token, userid, admin, tokenExpiration) => {
 
@@ -90,11 +90,14 @@ class App extends Component {
 
   }
 
+
   render() {
 
     let token = this.state.token;
     let userid = this.state.userid;
+    let isadmin = this.state.admin;
     let refresh = this.state.refresh;
+    let path = this.state.path;
 
     //if we have a token and it is still valid, lets refresh its log out time and instantly log the user in below
     if(token && refresh) return (<Query query={AUTH_TOKEN_VALIDATE} variables={{ userid }} >
@@ -123,11 +126,7 @@ class App extends Component {
                                   }}>
 
         <div className="App">
-            {token &&
-              <ApolloConsumer>{client =>
-                  (<div className="sign-out"><button onClick={()=> this.sessionsignout()}>Sign Out</button></div>)
-              }</ApolloConsumer>
-            }
+
             <Switch>
 
               {!token && <Redirect path="/" to="/AuthPage" exact />}

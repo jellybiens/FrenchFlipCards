@@ -3,6 +3,8 @@ import { Redirect, NavLink  } from 'react-router-dom';
 
 import AuthContext from '../../context/auth-context';
 
+import Navigation from './Navigation'
+
 export class MainMenu extends Component {
 
   static contextType = AuthContext;
@@ -12,7 +14,7 @@ export class MainMenu extends Component {
       this.state = {
         wordType: [],
         focussed: "all",
-        frontFace: "both",
+        frontFace: "french",
         limit: 10,
         onyva: false
       }
@@ -37,12 +39,13 @@ export class MainMenu extends Component {
     let frontFace = this.state.frontFace;
     let limit = this.state.limit;
 
+
     if(this.state.onyva) return <Redirect to={{pathname:"/FlipCards", state:{ wordType: wordType, focussed: focussed, frontFace: frontFace, limit: limit }}} />
 
     return (
       <Fragment>
-      {this.context.admin && <NavLink to="/AddWords"><div className="add-cards-btn"><button>Add Cards</button></div></NavLink>}
-
+      <Navigation path={this.props.location.pathname}
+                  context={this.context} />
       <div className="main-menu">
         <div className="cards-types-header"><span>WORD TYPES</span></div>
         <div className="cards-types-options">
@@ -58,7 +61,7 @@ export class MainMenu extends Component {
 
           <div className={!wordType.includes("adj") ? "adj-opt" : "adj-opt active"}
                onClick={() => this.setWordType("adj")}>
-               <span>ADJECTIVES</span>
+               <span>PREPOSITIONS<br />DESCRIPTIONS</span>
           </div>
         </div>
 
@@ -101,7 +104,7 @@ export class MainMenu extends Component {
         <div className="cards-limit-header"><span>TOTAL CARDS LIMIT</span></div>
         <div className="cards-limit-options">
           <div className={limit === 10 ? "opt-10 active" : "opt-10"}
-               onClick={() => this.setState({limit: 10})}
+               onClick={() => limit !== 10 ? this.setState({limit: 10}) : this.setState({limit: 1000})}
               >
             <span>10</span>
           </div>

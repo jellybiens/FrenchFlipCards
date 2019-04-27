@@ -55,8 +55,7 @@ html, body, #root {
 %div{
   position:relative;
   width:100%;
-  height:90vh;
-  top:0%;
+  height:95%;
   left:0%;
   overflow:hidden;
 
@@ -71,7 +70,7 @@ html, body, #root {
 
   %button{
     button{
-      position:absolute;
+      position:relative;
       text-align: center;
       background: $main-blue;
       border: 1px solid $main-blue;
@@ -87,40 +86,39 @@ html, body, #root {
     }
   }
 
-  .sign-out, .go-back, .add-cards-btn{
-    position: relative;
-    @extend %button;
-    z-index:5;
-    button{
-      border-radius: 0px;
-      text-align: center;
-      padding: 0;
-      box-shadow: unset;
-    }
-  }
 
-  .sign-out{
-    float:left;
-    @include absolute-positioning(10vh, 20%, 0%, 0%);
-    button{
-      @include absolute-positioning(50%, 50%, 0%, 0%);
-      border-bottom-right-radius: 3px;
-    }
-  }
+  .nav-buttons{
+    display:flex;
+    @include absolute-positioning(5%, 100%, 0%, 0%);
+    div{ a{
+      .sign-out, .go-back, .add-cards-btn{
+        position: relative;
+        @extend %button;
+        z-index:5;
+        button{
+          @include absolute-positioning(100%, 100%, 0, 0);
+          border-radius: 0px;
+          text-align: center;
+          padding: 0;
+          box-shadow: unset;
+        }
+      }
+    } }
 
-  .go-back{
-    @include absolute-positioning(10vh, 20%, 0%, 90%)
-    button{
-      @include absolute-positioning(50%, 50%, 0%, 0%);
-      border-bottom-left-radius: 3px;
-    }
-  }
-  .add-cards-btn{
-    @include absolute-positioning(10vh, 10%, 0%, 90%)
-    button{
-      @include absolute-positioning(50%, 100%, 0%, 0%);
-      border-bottom-left-radius: 3px;
-    }
+     .left-container{@include absolute-positioning(100%, 50%, 0%, 0%);}
+     .right-container{@include absolute-positioning(100%, 50%, 0%, 50%);}
+
+      .sign-out{
+          @include absolute-positioning(100%, 40%, 0, 0);
+        button{
+          border-bottom-right-radius: 3px;
+      } }
+
+      .go-back, .add-cards-btn{
+          @include absolute-positioning(100%, 40%, -5%, 60%);
+         button{
+          border-bottom-left-radius: 3px;
+      } }
   }
 
   .auth-page{
@@ -159,8 +157,8 @@ html, body, #root {
       input:nth-of-type(3)  { @include absolute-positioning(10%, 90%, 36%, 5%); }
       .errorMessage         { @include absolute-positioning(8%, 80%, 46%, 10%); }
       button:nth-of-type(1) { @include absolute-positioning(12%, 85%, 54%, 7.5%); }
-      button:nth-of-type(2) { @include absolute-positioning(12%, 85%, 69%, 7.5%); }
-      button:nth-of-type(3) { @include absolute-positioning(12%, 85%, 84%, 7.5%); }
+      button:nth-of-type(2) { @include absolute-positioning(12%, 85%, 56%, 7.5%); }
+      button:nth-of-type(3) { @include absolute-positioning(12%, 85%, 58%, 7.5%); }
 
     }
   }
@@ -168,8 +166,6 @@ html, body, #root {
 
   .main-menu{
     @extend %div;
-    position:relative;
-
 
     div{
       position:relative;
@@ -236,6 +232,11 @@ html, body, #root {
       .verb-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left); filter: hue-rotate(90deg); }
       .noun-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*2)); filter: hue-rotate(180deg); }
       .adj-opt  { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*3)); filter: hue-rotate(270deg); }
+      .adj-opt{
+        span{
+          font-size: 80%;
+        }
+      }
     }
 
     $opt-height: 50%;
@@ -398,9 +399,9 @@ html, body, #root {
   }
 
   .cards_deck{
-    height:100% !important;
-    top: -10vh;
     @extend %div;
+    top: -5% !important;
+    height: 100% !important;
 
     .tap-gif{
       position:absolute;
@@ -615,8 +616,6 @@ html, body, #root {
 
   .add-cards{
     @extend %div;
-    height:100% !important;
-    top: -10vh;
 
     form{
       position:absolute;
@@ -655,7 +654,7 @@ html, body, #root {
       .cards-types-options  { @include absolute-positioning(20%, 90%, 40%, 5%); }
       .resMessage           { @include absolute-positioning(8%, 80%, 65%, 10%); }
       .errorMessage         { @include absolute-positioning(8%, 80%, 65%, 10%); }
-      button:nth-of-type(1) { @include absolute-positioning(12%, 85%, 75%, 7.5%); }
+      button:nth-of-type(1) { position: absolute; @include absolute-positioning(12%, 85%, 75%, 7.5%); }
 
       .cards-types-header, .cards-types-options{
         position:relative;

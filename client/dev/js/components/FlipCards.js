@@ -8,6 +8,7 @@ import AuthContext from '../../context/auth-context';
 
 import FlipCard from './FlipCard';
 import LoadingFlipper from './LoadingFlipper';
+import Navigation from './Navigation'
 import { destroyCard, disableSwipe } from './destroyCard';
 import imgTick from '../../imgs/tick.png';
 import imgCross from '../../imgs/cross.png';
@@ -74,6 +75,7 @@ export class FlipCards extends Component {
   }
 
   render() {
+
     let wordType = this.props.location.state.wordType;
         wordType = wordType.length === 0 ? undefined : wordType;
     let focussed = this.props.location.state.focussed;
@@ -94,29 +96,33 @@ export class FlipCards extends Component {
                                    ;
 
     return (
-      <div className={this.state.runAnimation ? "cards_deck tutorial-animation" : "cards_deck"}>
-        <NavLink to="/MainMenu"><div className="go-back"><button>Go Back</button></div></NavLink>
-        <div className="left-gradient"></div>
-        <div className="right-gradient"></div>
-        <div className="tap-gif" onClick={() => !this.state.runAnimation ? this.setState({runAnimation: true}) : {}}><img className="tap-gif-img" src={tapgif} /></div>
-        {query}
+      <Fragment>
+      <Navigation path={this.props.location.pathname}
+                  context={this.context} />
+        <div className={this.state.runAnimation ? "cards_deck tutorial-animation" : "cards_deck"}>
 
-        <div className="swipe-buttons">
-          <div className="button-left" onClick={() => this.swipeDir(false)}>
-            <img src={imgCross} />
+          <div className="left-gradient"></div>
+          <div className="right-gradient"></div>
+          <div className="tap-gif" onClick={() => !this.state.runAnimation ? this.setState({runAnimation: true}) : {}}><img className="tap-gif-img" src={tapgif} /></div>
+          {query}
+
+          <div className="swipe-buttons">
+            <div className="button-left" onClick={() => this.swipeDir(false)}>
+              <img src={imgCross} />
+            </div>
+            <div className="button-right" onClick={() => this.swipeDir(true)}>
+              <img src={imgTick} />
+            </div>
           </div>
-          <div className="button-right" onClick={() => this.swipeDir(true)}>
-            <img src={imgTick} />
-          </div>
+            <div className="correct-box"><span>Je sais cela!</span></div>
+            <div className="wrong-box"><span>J'en ai aucune idée...</span></div>
+            <div className="tap-start-tut"><span>Tap card to flip it</span></div>
+            <div className="correct-tut"><span>Swipe RIGHT if you know it</span></div>
+            <div className="wrong-tut"><span>Swipe LEFT if you don't</span></div>
+            <div className="button-tut"><span>Or use the corresponding buttons</span></div>
+            {this.state.goBack && <NavLink to="/MainMenu"><button className="end-of-stack">End of stack</button></NavLink>}
         </div>
-          <div className="correct-box"><span>Je sais cela!</span></div>
-          <div className="wrong-box"><span>J'en ai aucune idée...</span></div>
-          <div className="tap-start-tut"><span>Tap card to flip it</span></div>
-          <div className="correct-tut"><span>Swipe RIGHT if you know it</span></div>
-          <div className="wrong-tut"><span>Swipe LEFT if you don't</span></div>
-          <div className="button-tut"><span>Or use the corresponding buttons</span></div>
-          {this.state.goBack && <NavLink to="/MainMenu"><button className="end-of-stack">End of stack</button></NavLink>}
-      </div>
+      </Fragment>
     );
   }
 }

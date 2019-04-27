@@ -73,9 +73,7 @@ Card.hasMany(Score, {foreignKey: 'wordid'});
 
 
 
-// const { WORD_ARR } = require('./dbinit');
-// import _ from 'lodash';
-// import Faker from 'faker';
+// const WORD_ARR = require('./dbinit');
 //
 // Conn.sync({force: true}).then(() => {
 //

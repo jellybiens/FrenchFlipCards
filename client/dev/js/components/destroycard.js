@@ -26,7 +26,7 @@ export const destroyCard = (dir, swiped) => {
     }, 600);
 
 
-    const endOfStack = document.querySelector('.cards_deck').childElementCount === 7;
+    const endOfStack = document.querySelector('.cards_deck').childElementCount === 6;
     //return if stack is empty
     return endOfStack;
 }

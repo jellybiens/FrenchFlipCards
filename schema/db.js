@@ -73,30 +73,30 @@ Card.hasMany(Score, {foreignKey: 'wordid'});
 
 
 
-// const WORD_ARR = require('./dbinit');
-//
-// Conn.sync({force: true}).then(() => {
-//
-//  User.create({
-//     username: 'jellybiens',
-//     password: md5('password'),
-//     admin: true
-//   });
-//  User.create({
-//     username: 'guest',
-//     password: md5('password123'),
-//     admin: false
-//   });
-//
-//   WORD_ARR.map((v, i)=>{
-//
-//     return Card.create({
-//       french: v.french,
-//       english: v.english,
-//       wordType: v.wordType
-//     });
-//   });
-//
-// });
+const WORD_ARR = require('./dbinit');
+
+Conn.sync({force: true}).then(() => {
+
+ User.create({
+    username: 'jellybiens',
+    password: md5('password'),
+    admin: true
+  });
+ User.create({
+    username: 'guest',
+    password: md5('password123'),
+    admin: false
+  });
+
+  WORD_ARR.map((v, i)=>{
+
+    return Card.create({
+      french: v.french,
+      english: v.english,
+      wordType: v.wordType
+    });
+  });
+
+});
 
 module.exports = Conn;

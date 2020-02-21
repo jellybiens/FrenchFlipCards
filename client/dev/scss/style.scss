@@ -1,16 +1,19 @@
+$spanish-bg: #fff099;
+$spanish-main: #d1ce01;
+$french-bg: #99ebff;
+$french-main: #01d1d1;
+$bg-colour: $spanish-bg;
+$main-theme: $spanish-main;
+$dark-main2: darken($main-theme, 2%);
+$dark-main10: darken($main-theme, 10%);
+$dark-main15: darken($main-theme, 15%);
+$dark-main20: darken($main-theme, 20%);
+$dark-main25: darken($main-theme, 25%);
 
-$bg-colour: #99ebff;
-$main-blue: #01d1d1;
-$dark-blue2: darken($main-blue, 2%);
-$dark-blue10: darken($main-blue, 10%);
-$dark-blue15: darken($main-blue, 15%);
-$dark-blue20: darken($main-blue, 20%);
-$dark-blue25: darken($main-blue, 25%);
-
-$light-blue: lighten($main-blue, 50%);
-$light-red: adjust-hue($light-blue, 180%);
-$light-purp: adjust-hue($light-blue, 90%);
-$light-yellow: adjust-hue($light-blue, 270%);
+$light-main: lighten($main-theme, 50%);
+$light-180: adjust-hue($light-main, 180%);
+$light-90: adjust-hue($light-main, 90%);
+$light-270: adjust-hue($light-main, 270%);
 
 $pos-msg: #00cc00;
 $neg-msg: #ff0000;
@@ -19,221 +22,317 @@ $neg-msg-dark: darken($neg-msg, 30%);
 
 
 * {
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
-      font-family: Courier New;
+  font-family: Courier New;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   margin: auto;
   padding: 0;
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 
 }
 
-@mixin browserSupport($propName, $propVar){
-	-webkit-#{$propName}: $propVar;
-	-khtml-#{$propName}: $propVar;
-	-moz-#{$propName}: $propVar;
-	-ms-#{$propName}: $propVar;
-	#{$propName}: $propVar;
+@mixin browserSupport($propName, $propVar) {
+  -webkit-#{$propName}: $propVar;
+  -khtml-#{$propName}: $propVar;
+  -moz-#{$propName}: $propVar;
+  -ms-#{$propName}: $propVar;
+  #{$propName}: $propVar;
 }
 
-@mixin absolute-positioning($height, $width, $top, $left){
-  height:$height;
-  width:$width;
-  top:$top;
-  left:$left;
+@mixin absolute-positioning($height, $width, $top, $left) {
+  height: $height;
+  width: $width;
+  top: $top;
+  left: $left;
 }
 
-%div{
-  position:relative;
-  width:100%;
-  height:95%;
-  left:0%;
-  overflow:hidden;
+%div {
+  position: relative;
+  width: 100%;
+  height: 95%;
+  left: 0%;
+  overflow: hidden;
 
 }
 
-.App{
-  background-color:$bg-colour;
-  margin:auto;
-  width:100%;
-  height:100%;
-  max-width:750px;
+.App {
+  background-color: $bg-colour;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  max-width: 750px;
 
-  %button{
-    button{
-      position:relative;
+  %button {
+    button {
+      position: relative;
       text-align: center;
-      background: $main-blue;
-      border: 1px solid $main-blue;
+      background: $main-theme;
+      border: 1px solid $main-theme;
       border-radius: 3px;
-      box-sizing:border-box;
-      box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+      box-sizing: border-box;
+      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
       color: #ffffff;
       cursor: pointer;
     }
-    button:active{
-      background: $dark-blue20;
-      border-color: $dark-blue25;
+
+    button:active {
+      background: $dark-main20;
+      border-color: $dark-main25;
     }
   }
 
 
-  .nav-buttons{
-    display:flex;
+  .nav-buttons {
+    display: flex;
     @include absolute-positioning(5%, 100%, 0%, 0%);
-    div{ a{
-      .sign-out, .go-back, .add-cards-btn{
-        position: relative;
-        @extend %button;
-        z-index:5;
-        button{
-          @include absolute-positioning(100%, 100%, 0, 0);
-          border-radius: 0px;
-          text-align: center;
-          padding: 0;
-          box-shadow: unset;
+
+    div {
+      a {
+
+        .sign-out,
+        .go-back,
+        .add-cards-btn {
+          position: relative;
+          @extend %button;
+          z-index: 5;
+
+          button {
+            @include absolute-positioning(100%, 100%, 0, 0);
+            border-radius: 0px;
+            text-align: center;
+            padding: 0;
+            box-shadow: unset;
+          }
         }
       }
-    } }
+    }
 
-     .left-container{@include absolute-positioning(100%, 50%, 0%, 0%);}
-     .right-container{@include absolute-positioning(100%, 50%, 0%, 50%);}
+    .left-container {
+      @include absolute-positioning(100%, 50%, 0%, 0%);
+    }
 
-      .sign-out{
-          @include absolute-positioning(100%, 40%, 0, 0);
-        button{
-          border-bottom-right-radius: 3px;
-      } }
+    .right-container {
+      @include absolute-positioning(100%, 50%, 0%, 50%);
+    }
 
-      .go-back, .add-cards-btn{
-          @include absolute-positioning(100%, 40%, -5%, 60%);
-         button{
-          border-bottom-left-radius: 3px;
-      } }
+    .sign-out {
+      @include absolute-positioning(100%, 40%, 0, 0);
+
+      button {
+        border-bottom-right-radius: 3px;
+      }
+    }
+
+    .go-back,
+    .add-cards-btn {
+      @include absolute-positioning(100%, 40%, -5%, 60%);
+
+      button {
+        border-bottom-left-radius: 3px;
+      }
+    }
   }
 
-  .auth-page{
+  .auth-page {
     @extend %div;
 
-    form{
-      position:absolute;
-      height:98%;
-      width:98%;
-      top:1%;
-      left:1%;
+    form {
+      position: absolute;
+      height: 98%;
+      width: 98%;
+      top: 1%;
+      left: 1%;
 
-      .errorMessage, input{
-        position:absolute;
+      .errorMessage,
+      input {
+        position: absolute;
         text-align: center;
-        border : 0;
+        border: 0;
         font-size: 1.5em;
       }
-      button{font-size: 1.5em;}
-      .errorMessage{
+
+      button {
+        font-size: 1.5em;
+      }
+
+      .errorMessage {
         font-size: 110%;
-        color:$neg-msg;
+        color: $neg-msg;
         text-shadow: 0px 0px 2px $neg-msg-dark;
 
-        span{
-          position:relative;
-          top:40%;
+        span {
+          position: relative;
+          top: 40%;
           transform: translate(-50%, -50%);
         }
 
       }
+
       @extend %button;
 
-      input:nth-of-type(1)  { @include absolute-positioning(10%, 90%, 10%, 5%); }
-      input:nth-of-type(2)  { @include absolute-positioning(10%, 90%, 23%, 5%); }
-      input:nth-of-type(3)  { @include absolute-positioning(10%, 90%, 36%, 5%); }
-      .errorMessage         { @include absolute-positioning(8%, 80%, 46%, 10%); }
-      button:nth-of-type(1) { @include absolute-positioning(12%, 85%, 54%, 7.5%); }
-      button:nth-of-type(2) { @include absolute-positioning(12%, 85%, 56%, 7.5%); }
-      button:nth-of-type(3) { @include absolute-positioning(12%, 85%, 58%, 7.5%); }
+      input:nth-of-type(1) {
+        @include absolute-positioning(10%, 90%, 10%, 5%);
+      }
+
+      input:nth-of-type(2) {
+        @include absolute-positioning(10%, 90%, 23%, 5%);
+      }
+
+      input:nth-of-type(3) {
+        @include absolute-positioning(10%, 90%, 36%, 5%);
+      }
+
+      .errorMessage {
+        @include absolute-positioning(8%, 80%, 46%, 10%);
+      }
+
+      button:nth-of-type(1) {
+        @include absolute-positioning(12%, 85%, 54%, 7.5%);
+      }
+
+      button:nth-of-type(2) {
+        @include absolute-positioning(12%, 85%, 56%, 7.5%);
+      }
+
+      button:nth-of-type(3) {
+        @include absolute-positioning(12%, 85%, 58%, 7.5%);
+      }
 
     }
   }
 
 
-  .main-menu{
+  .main-menu {
     @extend %div;
 
-    div{
-      position:relative;
+    div {
+      position: relative;
       text-align: center;
-      display:flex;
-      span{
-        position:absolute;
+      display: flex;
+
+      span {
+        position: absolute;
         width: 100%;
-        top:50%;
+        top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
       }
-      div{
-        position:relative;
+
+      div {
+        position: relative;
         text-align: center;
-        background: $main-blue;
-        border: 1px solid $dark-blue2;
+        background: $main-theme;
+        border: 1px solid $dark-main2;
         border-radius: 5px;
-        box-sizing:border-box;
-        box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+        box-sizing: border-box;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
         color: #222222;
         cursor: pointer;
-        span{
-          position:absolute;
-          top:50%;
+
+        span {
+          position: absolute;
+          top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
         }
       }
-      .active{
-        background: $dark-blue10;
-        border-color: $dark-blue15;
-        box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+
+      .active {
+        background: $dark-main10;
+        border-color: $dark-main15;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         border-width: 5px;
         color: #ffffff;
         font-weight: bolder;
       }
-      div:active{
-        background: $dark-blue20;
-        border-color: $dark-blue25;
+
+      div:active {
+        background: $dark-main20;
+        border-color: $dark-main25;
         color: #ffffff;
       }
     }
 
-    .cards-types-header{  @include absolute-positioning(5%, 100%, 0, 0); }
-    .cards-types-options{ @include absolute-positioning(18%, 100%, 0, 0); }
-    .cards-focus-header{  @include absolute-positioning(2%, 100%, 3%, 0); }
-    .cards-focus-options{ @include absolute-positioning(18%, 96%, 0, 2%); }
-    .cards-front-header{  @include absolute-positioning(2%, 100%, 3%, 0); }
-    .cards-front-options{ @include absolute-positioning(18%, 96%, 0, 2%); }
-    .cards-limit-header{  @include absolute-positioning(2%, 100%, 3%, 0); }
-    .cards-limit-options{ @include absolute-positioning(15%, 96%, 0, 2%); }
-    .confirm-options{     @include absolute-positioning(20%, 96%, 0, 2%); }
+    .cards-types-header {
+      @include absolute-positioning(5%, 100%, 0, 0);
+    }
 
-    .cards-types-options{
-      div{
-        position:relative;
+    .cards-types-options {
+      @include absolute-positioning(18%, 100%, 0, 0);
+    }
+
+    .cards-focus-header {
+      @include absolute-positioning(2%, 100%, 3%, 0);
+    }
+
+    .cards-focus-options {
+      @include absolute-positioning(18%, 96%, 0, 2%);
+    }
+
+    .cards-front-header {
+      @include absolute-positioning(2%, 100%, 3%, 0);
+    }
+
+    .cards-front-options {
+      @include absolute-positioning(18%, 96%, 0, 2%);
+    }
+
+    .cards-limit-header {
+      @include absolute-positioning(2%, 100%, 3%, 0);
+    }
+
+    .cards-limit-options {
+      @include absolute-positioning(15%, 96%, 0, 2%);
+    }
+
+    .confirm-options {
+      @include absolute-positioning(20%, 96%, 0, 2%);
+    }
+
+    .cards-types-options {
+      div {
+        position: relative;
       }
+
       $opt-height: 80%;
       $opt-top: (100% - $opt-height)/2;
       $opt-width: 30%;
       $opt-left: (100% - $opt-width*3)/4;
 
-      .verb-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left); filter: hue-rotate(90deg); }
-      .noun-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*2)); filter: hue-rotate(180deg); }
-      .adj-opt  { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*3)); filter: hue-rotate(270deg); }
-      .adj-opt{
-        span{
+      .verb-opt {
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
+        filter: hue-rotate(90deg);
+      }
+
+      .noun-opt {
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*2));
+        filter: hue-rotate(180deg);
+      }
+
+      .adj-opt {
+        @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*3));
+        filter: hue-rotate(270deg);
+      }
+
+      .adj-opt {
+        span {
           font-size: 80%;
         }
       }
@@ -242,155 +341,278 @@ html, body, #root {
     $opt-height: 50%;
     $opt-top: (100% - $opt-height)/2;
 
-    .cards-focus-options{
+    .cards-focus-options {
       $opt-width: 50%;
-      $opt-left: 0;//(100% - $opt-width*2)/2;
+      $opt-left: 0; //(100% - $opt-width*2)/2;
 
-      .all-opt{
+      .all-opt {
         @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
       }
-      .focus-opt{
+
+      .focus-opt {
         @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
       }
     }
 
-    .cards-front-options{
+    .cards-front-options {
       $opt-width: 33.33%;
       $opt-left: 0;
 
-      .french-opt{
+      .french-opt {
         @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
       }
-      .both-opt{
+
+      .both-opt {
         @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
-        border-radius:0;
+        border-radius: 0;
       }
-      .english-opt{
+
+      .english-opt {
         @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
       }
     }
 
-    .cards-limit-options{
+    .cards-limit-options {
       $opt-width: 25%;
       $opt-left: 0;
 
-      .opt-10{
+      .opt-10 {
         @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
       }
-      .opt-25{
+
+      .opt-25 {
         @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
-        border-radius:0;
+        border-radius: 0;
       }
-      .opt-50{
+
+      .opt-50 {
         @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
-        border-radius:0;
+        border-radius: 0;
       }
-      .opt-100{
+
+      .opt-100 {
         @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
       }
     }
 
-    .confirm-options{
+    .confirm-options {
       @extend %button;
-      button{ @include absolute-positioning(70%, 70%, 15%, 15%); font-size: 150%;}
+
+      button {
+        @include absolute-positioning(70%, 70%, 15%, 15%);
+        font-size: 150%;
+      }
     }
   }
 
-  .cards_deck.tutorial-animation{
+  .cards_deck.tutorial-animation {
 
-    @keyframes swipeTutorial{
-      0% { @include browserSupport(transform, rotateZ(0deg) translateX(0%)); }
-      10%{ @include browserSupport(transform, rotateZ(5deg) translateX(50%)); }
-      40%{ @include browserSupport(transform, rotateZ(5deg) translateX(50%)); }
-      45%{ @include browserSupport(transform, rotateZ(0deg) translateX(0%)); }
-      50%{ @include browserSupport(transform, rotateZ(0deg) translateX(0%)); }
-      60%{ @include browserSupport(transform, rotateZ(-5deg) translateX(-50%)); }
-      90%{ @include browserSupport(transform, rotateZ(-5deg) translateX(-50%)); }
-      95%{ @include browserSupport(transform, rotateZ(0deg) translateX(0%)); }
-      100%{ @include browserSupport(transform, rotateZ(0deg) translateX(0%)); }
-    }
-    @keyframes flipTutorial{
-      0% { @include browserSupport(transform, rotateY(0deg)); }
-      4% { @include browserSupport(transform, rotateY(180deg)); }
-      96%{ @include browserSupport(transform, rotateY(180deg)); }
-      100%{ @include browserSupport(transform, rotateY(0deg)); }
-    }
-    @keyframes correctTutorial{
-      0% { opacity:0; }
-      10%{ opacity:1; }
-      40%{ opacity:1; }
-      45%{ opacity:0; }
-    }
-    @keyframes wrongTutorial{
-      50% { opacity:0; }
-      60%{ opacity:1; }
-      90%{ opacity:1; }
-      95%{ opacity:0; }
-    }
-    @keyframes buttonTutMsg{
-      0% { opacity: 0; }
-      10%{ opacity: 1; }
-      90%{ opacity: 1; }
-      95%{ opacity: 0; }
-    }
-    @keyframes button1Tut{
-      0% { filter: brightness(100%); transform: scale(1); }
-      10%{ filter: brightness(150%); transform: scale(1.2); }
-      40%{ filter: brightness(150%); transform: scale(1.2); }
-      45%{ filter: brightness(100%); transform: scale(1); }
-    }
-    @keyframes button2Tut{
-      50% { filter: brightness(100%); transform: scale(1); }
-      60%{ filter: brightness(150%); transform: scale(1.2); }
-      90%{ filter: brightness(150%); transform: scale(1.2); }
-      95%{ filter: brightness(100%); transform: scale(1); }
+    @keyframes swipeTutorial {
+      0% {
+        @include browserSupport(transform, rotateZ(0deg) translateX(0%));
+      }
+
+      10% {
+        @include browserSupport(transform, rotateZ(5deg) translateX(50%));
+      }
+
+      40% {
+        @include browserSupport(transform, rotateZ(5deg) translateX(50%));
+      }
+
+      45% {
+        @include browserSupport(transform, rotateZ(0deg) translateX(0%));
+      }
+
+      50% {
+        @include browserSupport(transform, rotateZ(0deg) translateX(0%));
+      }
+
+      60% {
+        @include browserSupport(transform, rotateZ(-5deg) translateX(-50%));
+      }
+
+      90% {
+        @include browserSupport(transform, rotateZ(-5deg) translateX(-50%));
+      }
+
+      95% {
+        @include browserSupport(transform, rotateZ(0deg) translateX(0%));
+      }
+
+      100% {
+        @include browserSupport(transform, rotateZ(0deg) translateX(0%));
+      }
     }
 
-    .card:nth-last-of-type(1){
+    @keyframes flipTutorial {
+      0% {
+        @include browserSupport(transform, rotateY(0deg));
+      }
+
+      4% {
+        @include browserSupport(transform, rotateY(180deg));
+      }
+
+      96% {
+        @include browserSupport(transform, rotateY(180deg));
+      }
+
+      100% {
+        @include browserSupport(transform, rotateY(0deg));
+      }
+    }
+
+    @keyframes correctTutorial {
+      0% {
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      40% {
+        opacity: 1;
+      }
+
+      45% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes wrongTutorial {
+      50% {
+        opacity: 0;
+      }
+
+      60% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      95% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes buttonTutMsg {
+      0% {
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      95% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes button1Tut {
+      0% {
+        filter: brightness(100%);
+        transform: scale(1);
+      }
+
+      10% {
+        filter: brightness(150%);
+        transform: scale(1.2);
+      }
+
+      40% {
+        filter: brightness(150%);
+        transform: scale(1.2);
+      }
+
+      45% {
+        filter: brightness(100%);
+        transform: scale(1);
+      }
+    }
+
+    @keyframes button2Tut {
+      50% {
+        filter: brightness(100%);
+        transform: scale(1);
+      }
+
+      60% {
+        filter: brightness(150%);
+        transform: scale(1.2);
+      }
+
+      90% {
+        filter: brightness(150%);
+        transform: scale(1.2);
+      }
+
+      95% {
+        filter: brightness(100%);
+        transform: scale(1);
+      }
+    }
+
+    .card:nth-last-of-type(1) {
       @include browserSupport(animation, swipeTutorial linear);
       @include browserSupport(animation-duration, 7s);
       @include browserSupport(animation-delay, 1s);
-      .flip-container{.flipper{
-        transform: rotateY(180deg) !important;
-      } }
+
+      .flip-container {
+        .flipper {
+          transform: rotateY(180deg) !important;
+        }
+      }
     }
-    .right-gradient, .correct-tut{
+
+    .right-gradient,
+    .correct-tut {
       @include browserSupport(animation, correctTutorial linear);
       @include browserSupport(animation-duration, 7s);
       @include browserSupport(animation-delay, 1s);
     }
 
-    .left-gradient, .wrong-tut{
+    .left-gradient,
+    .wrong-tut {
       @include browserSupport(animation, wrongTutorial linear);
       @include browserSupport(animation-duration, 7s);
       @include browserSupport(animation-delay, 1s);
     }
 
-    .button-tut{
+    .button-tut {
       @include browserSupport(animation, buttonTutMsg linear);
       @include browserSupport(animation-duration, 4s);
       @include browserSupport(animation-delay, 8s);
     }
 
-    .swipe-buttons{
-      .button-left img{
+    .swipe-buttons {
+      .button-left img {
         @include browserSupport(animation, button1Tut linear);
         @include browserSupport(animation-duration, 3s);
         @include browserSupport(animation-delay, 8s);
       }
-      .button-right img{
+
+      .button-right img {
         @include browserSupport(animation, button2Tut linear);
         @include browserSupport(animation-duration, 3s);
         @include browserSupport(animation-delay, 8s);
@@ -398,18 +620,19 @@ html, body, #root {
     }
   }
 
-  .cards_deck{
+  .cards_deck {
     @extend %div;
     top: -5% !important;
     height: 100% !important;
 
-    .tap-gif{
-      position:absolute;
-      width:100%;
-      height:40%;
-      top:25%;
-      z-index:10;
-      img{
+    .tap-gif {
+      position: absolute;
+      width: 100%;
+      height: 40%;
+      top: 25%;
+      z-index: 10;
+
+      img {
         height: auto;
         width: auto;
         margin: auto;
@@ -419,87 +642,107 @@ html, body, #root {
         position: relative;
       }
     }
-    .tap-start-tut{
+
+    .tap-start-tut {
       opacity: 1 !important;
     }
 
-    .left-gradient, .right-gradient{
-        transition: 0.2s;
-        transition-property: opacity;
-        position:absolute;
-        height:200%;
-        width:50%;
-        top:-50%;
-        border-radius: 100%;
-        opacity:0;
-        -webkit-filter: blur(10px);
-        z-index:3;
-    }
-
-    .left-gradient{
-      left:-25%;
-      background: radial-gradient(ellipse at center, $neg-msg 15%,rgba(255,25,25,0) 85%,rgba(255,25,25,0) 100%);
-    }
-    .right-gradient{
-      left:75%;
-      background: radial-gradient(ellipse at center, lighten($pos-msg, 15%) 15%,rgba(25,255,25,0) 85%,rgba(25,255,25,0) 100%);
-    }
-    .correct-box{
-      color: lighten($pos-msg, 15%);
-    }
-    .wrong-box{
-      color: $neg-msg-dark;
-    }
-    .tap-start-tut, .correct-tut, .wrong-tut{ top: 7% !important;}
-    .correct-box, .wrong-box, .tap-start-tut, .correct-tut, .wrong-tut, .button-tut{
+    .left-gradient,
+    .right-gradient {
       transition: 0.2s;
       transition-property: opacity;
-      position:absolute;
-      height:20%;
-      width:100%;
-      top:62%;
-      left:0%;
-      opacity:0;
-      box-sizing:border-box;
+      position: absolute;
+      height: 200%;
+      width: 50%;
+      top: -50%;
+      border-radius: 100%;
+      opacity: 0;
+      -webkit-filter: blur(10px);
+      z-index: 3;
+    }
+
+    .left-gradient {
+      left: -25%;
+      background: radial-gradient(ellipse at center, $neg-msg 15%, rgba(255, 25, 25, 0) 85%, rgba(255, 25, 25, 0) 100%);
+    }
+
+    .right-gradient {
+      left: 75%;
+      background: radial-gradient(ellipse at center, lighten($pos-msg, 15%) 15%, rgba(25, 255, 25, 0) 85%, rgba(25, 255, 25, 0) 100%);
+    }
+
+    .correct-box {
+      color: lighten($pos-msg, 15%);
+    }
+
+    .wrong-box {
+      color: $neg-msg-dark;
+    }
+
+    .tap-start-tut,
+    .correct-tut,
+    .wrong-tut {
+      top: 7% !important;
+    }
+
+    .correct-box,
+    .wrong-box,
+    .tap-start-tut,
+    .correct-tut,
+    .wrong-tut,
+    .button-tut {
+      transition: 0.2s;
+      transition-property: opacity;
+      position: absolute;
+      height: 20%;
+      width: 100%;
+      top: 62%;
+      left: 0%;
+      opacity: 0;
+      box-sizing: border-box;
       font-size: 150%;
       text-align: center;
       text-shadow: 0px 0px 2px #000000;
       z-index: 3;
 
-      span{
-        position:absolute;
-        width:100%;
-        top:50%;
+      span {
+        position: absolute;
+        width: 100%;
+        top: 50%;
         transform: translate(-50%, -50%);
       }
     }
 
-    .swipe-buttons{
+    .swipe-buttons {
       position: absolute;
       height: 20%;
       top: 78%;
       width: 100%;
-      z-index:4;
+      z-index: 4;
 
-      .button-left, .button-right{
+      .button-left,
+      .button-right {
         position: absolute;
         height: 100%;
         width: 50%;
       }
-      .button-right{
-        left:50%;
-      }
-        img{
-          display:flex;
-          margin:auto;
-          height:100%;
-          width:auto;
 
+      .button-right {
+        left: 50%;
       }
 
+      img {
+        display: flex;
+        margin: auto;
+        height: 100%;
+        width: auto;
 
-      .button-left:active, .button-right:active{
-        img{
+      }
+
+
+      .button-left:active,
+      .button-right:active {
+        img {
           filter: brightness(50%);
           transform: scale(0.95);
         }
@@ -509,49 +752,65 @@ html, body, #root {
     }
 
     @extend %button;
-    .end-of-stack{ @include absolute-positioning(20%, 40%, 40%, 30%); }
 
-    @keyframes swipeRight{
-      0% { @include browserSupport(transform, rotateZ(0deg) translateX(0%) translateY(0%)); }
-      100%{ @include browserSupport(transform, rotateZ(50deg) translateX(300%) translateY(-100%)); }
-    }
-    @keyframes swipeLeft{
-      0% { @include browserSupport(transform, rotateZ(0deg) translateX(0%) translateY(0%)); }
-      100%{ @include browserSupport(transform, rotateZ(-50deg) translateX(-300%) translateY(-100%)); }
+    .end-of-stack {
+      @include absolute-positioning(20%, 40%, 40%, 30%);
     }
 
-    .swipeRight{
+    @keyframes swipeRight {
+      0% {
+        @include browserSupport(transform, rotateZ(0deg) translateX(0%) translateY(0%));
+      }
+
+      100% {
+        @include browserSupport(transform, rotateZ(50deg) translateX(300%) translateY(-100%));
+      }
+    }
+
+    @keyframes swipeLeft {
+      0% {
+        @include browserSupport(transform, rotateZ(0deg) translateX(0%) translateY(0%));
+      }
+
+      100% {
+        @include browserSupport(transform, rotateZ(-50deg) translateX(-300%) translateY(-100%));
+      }
+    }
+
+    .swipeRight {
       @include browserSupport(animation, swipeRight linear);
       @include browserSupport(animation-duration, 0.7s);
       @include browserSupport(transform, rotateZ(50deg) translateX(300%) translateY(-100%));
     }
-    .swipeLeft{
+
+    .swipeLeft {
       @include browserSupport(animation, swipeLeft linear);
       @include browserSupport(animation-duration, 0.7s);
       @include browserSupport(transform, rotateZ(-50deg) translateX(-300%) translateY(-100%));
     }
 
-    .swipeRightFin{
+    .swipeRightFin {
       @include browserSupport(transition-duration, 0.2s);
-      @include browserSupport(transform, translateX(300%)  !important);
+      @include browserSupport(transform, translateX(300%) !important);
     }
-    .swipeLeftFin{
+
+    .swipeLeftFin {
       @include browserSupport(transition-duration, 0.2s);
       @include browserSupport(transform, translateX(-300%) !important);
     }
 
-    .card{
-      position:absolute;
-      height:40%;
-      width:80%;
-      top:25%;
-      left:10%;
+    .card {
+      position: absolute;
+      height: 40%;
+      width: 80%;
+      top: 25%;
+      left: 10%;
 
       .flip-container {
-        position:absolute;
+        position: absolute;
         height: 100%;
         width: 100%;
-      	perspective: 1000px;
+        perspective: 1000px;
 
         .flipped {
           transform: rotateY(180deg) !important;
@@ -559,52 +818,70 @@ html, body, #root {
 
         .flipper {
           @extend %div;
-          height:100% !important;
-        	transition: .6s;
+          height: 100% !important;
+          transition: .6s;
           transform: rotateY(0deg);
-        	transform-style: preserve-3d;
-        	position: absolute;
+          transform-style: preserve-3d;
+          position: absolute;
           overflow: visible;
 
-          .verb-card { background-color: $light-purp; }
-          .noun-card { background-color: $light-red; }
-          .adj-card  { background-color: $light-yellow; }
+          .verb-card {
+            background-color: $light-90;
+          }
 
-          .front, .back {
+          .noun-card {
+            background-color: $light-180;
+          }
+
+          .adj-card {
+            background-color: $light-270;
+          }
+
+          .front,
+          .back {
             position: absolute;
-          	width: 90%;
-          	height: 90%;
-          	backface-visibility: hidden;
-            cursor:pointer;
-          	top: 5%;
-          	left: 5%;
+            width: 90%;
+            height: 90%;
+            backface-visibility: hidden;
+            cursor: pointer;
+            top: 5%;
+            left: 5%;
 
             border: 3px solid #000000;
             border-radius: 10px;
-            box-sizing:border-box;
+            box-sizing: border-box;
             color: #111111;
 
             text-align: center;
             font-size: 150%;
 
-            span{
-              position:absolute;
+            span {
+              position: absolute;
               width: 90%;
-              top:50%;
+              top: 50%;
               transform: translate(-50%, -50%);
-              .redA{color:#ff0000;}
-              .blueDE{color:#0000ff;}
-              .orangeSE{color:#ffa500;}
+
+              .redA {
+                color: #ff0000;
+              }
+
+              .blueDE {
+                color: #0000ff;
+              }
+
+              .orangeSE {
+                color: #ffa500;
+              }
             }
           }
 
           .front {
-          	z-index: 2;
-          	transform: rotateY(0deg);
+            z-index: 2;
+            transform: rotateY(0deg);
           }
 
           .back {
-          	transform: rotateY(180deg);
+            transform: rotateY(180deg);
           }
         }
       }
@@ -614,95 +891,141 @@ html, body, #root {
 
 
 
-  .add-cards{
+  .add-cards {
     @extend %div;
 
-    form{
-      position:absolute;
-      height:98%;
-      width:98%;
-      top:1%;
-      left:1%;
+    form {
+      position: absolute;
+      height: 98%;
+      width: 98%;
+      top: 1%;
+      left: 1%;
 
-      .errorMessage, .resMessage, input{
-        position:absolute;
+      .errorMessage,
+      .resMessage,
+      input {
+        position: absolute;
         text-align: center;
-        border : 0;
+        border: 0;
         font-size: 1.5em;
       }
-      button{font-size: 1.5em;}
-      .errorMessage, .resMessage{
+
+      button {
+        font-size: 1.5em;
+      }
+
+      .errorMessage,
+      .resMessage {
         font-size: 120%;
-        color:$neg-msg;
+        color: $neg-msg;
         text-shadow: 0px 0px 2px $neg-msg-dark;
 
-        span{
-          position:relative;
-          top:40%;
+        span {
+          position: relative;
+          top: 40%;
           transform: translate(-50%, -50%);
         }
       }
-      .resMessage{
-        color:$pos-msg;
+
+      .resMessage {
+        color: $pos-msg;
         text-shadow: 0px 0px 2px $pos-msg-dark;
       }
+
       @extend %button;
 
-      input:nth-of-type(1)  { @include absolute-positioning(10%, 90%, 10%, 5%); }
-      input:nth-of-type(2)  { @include absolute-positioning(10%, 90%, 23%, 5%); }
-      .cards-types-header   { @include absolute-positioning(3%, 90%, 40%, 5%); }
-      .cards-types-options  { @include absolute-positioning(20%, 90%, 40%, 5%); }
-      .resMessage           { @include absolute-positioning(8%, 80%, 65%, 10%); }
-      .errorMessage         { @include absolute-positioning(8%, 80%, 65%, 10%); }
-      button:nth-of-type(1) { position: absolute; @include absolute-positioning(12%, 85%, 75%, 7.5%); }
+      input:nth-of-type(1) {
+        @include absolute-positioning(10%, 90%, 10%, 5%);
+      }
 
-      .cards-types-header, .cards-types-options{
-        position:relative;
+      input:nth-of-type(2) {
+        @include absolute-positioning(10%, 90%, 23%, 5%);
+      }
+
+      .cards-types-header {
+        @include absolute-positioning(3%, 90%, 40%, 5%);
+      }
+
+      .cards-types-options {
+        @include absolute-positioning(20%, 90%, 40%, 5%);
+      }
+
+      .resMessage {
+        @include absolute-positioning(8%, 80%, 65%, 10%);
+      }
+
+      .errorMessage {
+        @include absolute-positioning(8%, 80%, 65%, 10%);
+      }
+
+      button:nth-of-type(1) {
+        position: absolute;
+        @include absolute-positioning(12%, 85%, 75%, 7.5%);
+      }
+
+      .cards-types-header,
+      .cards-types-options {
+        position: relative;
         text-align: center;
-        display:flex;
+        display: flex;
         $opt-height: 80%;
         $opt-top: (100% - $opt-height)/2;
         $opt-width: 30%;
         $opt-left: (100% - $opt-width*3)/4;
 
-        .verb-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left); filter: hue-rotate(90deg); }
-        .noun-opt { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*2)); filter: hue-rotate(180deg); }
-        .adj-opt  { @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*3)); filter: hue-rotate(270deg); }
+        .verb-opt {
+          @include absolute-positioning($opt-height, $opt-width, $opt-top, $opt-left);
+          filter: hue-rotate(90deg);
+        }
 
-        span{
-          position:absolute;
-          top:50%;
+        .noun-opt {
+          @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*2));
+          filter: hue-rotate(180deg);
+        }
+
+        .adj-opt {
+          @include absolute-positioning($opt-height, $opt-width, $opt-top, ($opt-left*3));
+          filter: hue-rotate(270deg);
+        }
+
+        span {
+          position: absolute;
+          top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
         }
-        div{
-          position:relative;
+
+        div {
+          position: relative;
           text-align: center;
-          background: $main-blue;
-          border: 1px solid $dark-blue2;
+          background: $main-theme;
+          border: 1px solid $dark-main2;
           border-radius: 5px;
-          box-sizing:border-box;
-          box-shadow: 1px 1px 5px rgba(0,0,0,0.25);
+          box-sizing: border-box;
+          box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25);
           color: #222222;
           cursor: pointer;
-          span{
-            position:absolute;
-            top:50%;
+
+          span {
+            position: absolute;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
           }
         }
-        .active{
-          background: $dark-blue10;
-          border-color: $dark-blue15;
-          box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+
+        .active {
+          background: $dark-main10;
+          border-color: $dark-main15;
+          box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
           border-width: 5px;
           color: #ffffff;
           font-weight: bolder;
         }
-        div:active{
-          background: $dark-blue20;
-          border-color: $dark-blue25;
+
+        div:active {
+          background: $dark-main20;
+          border-color: $dark-main25;
           color: #ffffff;
         }
       }
@@ -711,59 +1034,170 @@ html, body, #root {
 }
 
 
-.loading-flipper{
+.loading-flipper {
   $ani-dur: 3s;
-  position:absolute;
+  position: absolute;
   height: 40%;
   width: 40%;
   top: 25%;
   left: 30%;
 
-    @keyframes loadingflip{
-      0% { @include browserSupport(transform, rotateX(0deg) rotateY(0deg)); }
-      12%{ @include browserSupport(transform, rotateX(0deg) rotateY(180deg)); }
-      24%{ @include browserSupport(transform, rotateX(0deg) rotateY(180deg)); }
-      36%{ @include browserSupport(transform, rotateX(180deg) rotateY(180deg)); }
-      40%{ @include browserSupport(transform, rotateX(180deg) rotateY(180deg)); }
-      61%{ @include browserSupport(transform, rotateX(180deg) rotateY(360deg)); }
-      65%{ @include browserSupport(transform, rotateX(180deg) rotateY(360deg)); }
-      86%{ @include browserSupport(transform, rotateX(360deg) rotateY(360deg)); }
-      90%{ @include browserSupport(transform, rotateX(360deg) rotateY(360deg)); }
-      100%{ @include browserSupport(transform, rotateX(360deg) rotateY(360deg)); }
-      }
-
-    @keyframes frontcolour{
-      0% { background-color: $light-blue; } //front
-      12%{ background-color: $light-blue; } //front
-      13%{ background-color: $light-red; } //back
-      62%{ background-color: $light-red; } //front
-      63%{ background-color: $light-blue; } //back
-      100%{ background-color: $light-blue; } //back
-    }
-    @keyframes frontspan{
-      0% { @include browserSupport(transform, translate(-50%, -50%) scale(1, 1)); } //front
-      12%{  @include browserSupport(transform, translate(-50%, -50%) scale(1, 1)); } //front
-      13%{ @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1)); } //back
-      62%{  @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1)); } //front
-      63%{ @include browserSupport(transform, translate(-50%, -50%) scale(1, 1)); } //back
-      100%{ @include browserSupport(transform, translate(-50%, -50%) scale(1, 1)); } //back
+  @keyframes loadingflip {
+    0% {
+      @include browserSupport(transform, rotateX(0deg) rotateY(0deg));
     }
 
-    @keyframes backcolour{
-      0% { background-color: $light-purp; } //back
-      49% { background-color: $light-purp; } //back
-      50%{ background-color: $light-yellow; } //front
-      100%{ background-color: $light-yellow; } //front
+    12% {
+      @include browserSupport(transform, rotateX(0deg) rotateY(180deg));
     }
-    @keyframes backspan{
-      0% { @include browserSupport(transform, translate(-50%, -50%) scale(1, 1));  } //back
-      49% {  @include browserSupport(transform, translate(-50%, -50%) scale(1, 1));  } //back
-      50%{  @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1));  } //front
-      100%{  @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1));  } //front
+
+    24% {
+      @include browserSupport(transform, rotateX(0deg) rotateY(180deg));
     }
+
+    36% {
+      @include browserSupport(transform, rotateX(180deg) rotateY(180deg));
+    }
+
+    40% {
+      @include browserSupport(transform, rotateX(180deg) rotateY(180deg));
+    }
+
+    61% {
+      @include browserSupport(transform, rotateX(180deg) rotateY(360deg));
+    }
+
+    65% {
+      @include browserSupport(transform, rotateX(180deg) rotateY(360deg));
+    }
+
+    86% {
+      @include browserSupport(transform, rotateX(360deg) rotateY(360deg));
+    }
+
+    90% {
+      @include browserSupport(transform, rotateX(360deg) rotateY(360deg));
+    }
+
+    100% {
+      @include browserSupport(transform, rotateX(360deg) rotateY(360deg));
+    }
+  }
+
+  @keyframes frontcolour {
+    0% {
+      background-color: $light-main;
+    }
+
+    //front
+    12% {
+      background-color: $light-main;
+    }
+
+    //front
+    13% {
+      background-color: $light-180;
+    }
+
+    //back
+    62% {
+      background-color: $light-180;
+    }
+
+    //front
+    63% {
+      background-color: $light-main;
+    }
+
+    //back
+    100% {
+      background-color: $light-main;
+    }
+
+    //back
+  }
+
+  @keyframes frontspan {
+    0% {
+      @include browserSupport(transform, translate(-50%, -50%) scale(1, 1));
+    }
+
+    //front
+    12% {
+      @include browserSupport(transform, translate(-50%, -50%) scale(1, 1));
+    }
+
+    //front
+    13% {
+      @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1));
+    }
+
+    //back
+    62% {
+      @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1));
+    }
+
+    //front
+    63% {
+      @include browserSupport(transform, translate(-50%, -50%) scale(1, 1));
+    }
+
+    //back
+    100% {
+      @include browserSupport(transform, translate(-50%, -50%) scale(1, 1));
+    }
+
+    //back
+  }
+
+  @keyframes backcolour {
+    0% {
+      background-color: $light-90;
+    }
+
+    //back
+    49% {
+      background-color: $light-90;
+    }
+
+    //back
+    50% {
+      background-color: $light-270;
+    }
+
+    //front
+    100% {
+      background-color: $light-270;
+    }
+
+    //front
+  }
+
+  @keyframes backspan {
+    0% {
+      @include browserSupport(transform, translate(-50%, -50%) scale(1, 1));
+    }
+
+    //back
+    49% {
+      @include browserSupport(transform, translate(-50%, -50%) scale(1, 1));
+    }
+
+    //back
+    50% {
+      @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1));
+    }
+
+    //front
+    100% {
+      @include browserSupport(transform, translate(-50%, -50%) scale(-1, -1));
+    }
+
+    //front
+  }
 
   .flip-container {
-    position:absolute;
+    position: absolute;
     height: 100%;
     width: 100%;
     perspective: 1000px;
@@ -773,13 +1207,14 @@ html, body, #root {
       @include browserSupport(animation-duration, $ani-dur);
 
       @extend %div;
-      height:100% !important;
-      width:100% !important;
+      height: 100% !important;
+      width: 100% !important;
       transform-style: preserve-3d;
       position: absolute;
       overflow: visible !important;
 
-      .front, .back {
+      .front,
+      .back {
         position: absolute;
         width: 100%;
         height: 50%;
@@ -790,16 +1225,16 @@ html, body, #root {
 
         border: 3px solid #000000;
         border-radius: 10px;
-        box-sizing:border-box;
+        box-sizing: border-box;
         color: #111111;
 
         text-align: center;
         font-size: 100%;
 
-        span{
-          position:absolute;
+        span {
+          position: absolute;
           width: 90%;
-          top:50%;
+          top: 50%;
           transform: translate(-50%, -50%);
         }
       }
@@ -809,7 +1244,8 @@ html, body, #root {
         transform: rotateY(0deg);
         @include browserSupport(animation, frontcolour infinite linear);
         @include browserSupport(animation-duration, $ani-dur);
-        span{
+
+        span {
           @include browserSupport(animation, frontspan infinite linear);
           @include browserSupport(animation-duration, $ani-dur);
         }
@@ -819,7 +1255,8 @@ html, body, #root {
         @include browserSupport(transform, rotateY(180deg));
         @include browserSupport(animation, backcolour infinite linear);
         @include browserSupport(animation-duration, $ani-dur);
-        span{
+
+        span {
           @include browserSupport(animation, backspan infinite linear);
           @include browserSupport(animation-duration, $ani-dur);
         }

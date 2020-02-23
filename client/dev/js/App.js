@@ -104,10 +104,18 @@ class App extends Component {
                        {({loading, error, data}) => {
                          if(loading){ return <Fragment><LoadingFlipper /></Fragment>; }
                          if(error){ this.sessionsignout(); return <Fragment></Fragment>; }
-                         if(data){ this.sessionlogin(data.authTokenValidate.token,
-                                                      data.authTokenValidate.userid,
-                                                      data.authTokenValidate.admin,
-                                                      data.authTokenValidate.tokenExpiration); return <Fragment></Fragment>; }
+                         if (data.authTokenValidate !== null) {
+                           this.sessionlogin(
+                             data.authTokenValidate.token,
+                             data.authTokenValidate.userid,
+                             data.authTokenValidate.admin,
+                             data.authTokenValidate.tokenExpiration
+                           );
+                           return <Fragment></Fragment>;
+                         } else {
+                           this.sessionsignout();
+                           return <Fragment></Fragment>;
+                         }
                           }
                        }
                      </Query>);

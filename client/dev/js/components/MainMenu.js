@@ -15,8 +15,8 @@ export class MainMenu extends Component {
       this.state = {
         wordType: [],
         focussed: "all",
-        frontFace: "french",
-        limit: 10,
+        frontFace: "english",
+        limit: 25,
         onyva: false
       }
   }

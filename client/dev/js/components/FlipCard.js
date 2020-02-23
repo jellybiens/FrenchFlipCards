@@ -3,6 +3,8 @@ import { Redirect } from 'react-router-dom';
 import AuthContext from '../../context/auth-context';
 import { Mutation } from 'react-apollo';
 import { UPDATE_SCORE_POS, UPDATE_SCORE_NEG } from '../queries.js';
+import { Emojione } from "react-emoji-render";
+
 
 const Swing = require('swing');
 import { destroyCard, disableSwipe } from './destroyCard';
@@ -149,42 +151,48 @@ render(){
         <div className="flip-container">
           <div className={!this.state.flip ? "flipper" : "flipper flipped"}>
             <div className={"front " + wordType + "-card"}>
-              <span dangerouslySetInnerHTML={{ __html: frontWord }}></span>
+              <Emojione text={frontWord} />
             </div>
             <div className={"back " + wordType + "-card"}>
-              <span dangerouslySetInnerHTML={{ __html: backWord }}></span>
+              <Emojione text={backWord} />
             </div>
           </div>
         </div>
 
-
         <Mutation mutation={UPDATE_SCORE_POS}>
           {(updateScorePos, { data }) => (
-              <form className="submitPos"
-                onSubmit={e => {
-                  if(!this.context.userid) {; this.context.signout(); return <Redirect to="/" />}
-                  e.preventDefault();
-                  updateScorePos({ variables: { userid: this.context.userid, wordid: cardid } });
-                }}
-              >
-              </form>
-            )
-          }
+            <form
+              className="submitPos"
+              onSubmit={e => {
+                if (!this.context.userid) {
+                  this.context.signout();
+                  return <Redirect to="/" />;
+                }
+                e.preventDefault();
+                updateScorePos({
+                  variables: { userid: this.context.userid, wordid: cardid }
+                });
+              }}
+            ></form>
+          )}
         </Mutation>
-
 
         <Mutation mutation={UPDATE_SCORE_NEG}>
           {(updateScoreNeg, { data }) => (
-              <form className="submitNeg"
-                onSubmit={e => {
-                  if(!this.context.userid) {; this.context.signout(); return <Redirect to="/" />}
-                  e.preventDefault();
-                  updateScoreNeg({ variables: { userid: this.context.userid, wordid: cardid } });
-                }}
-              >
-              </form>
-            )
-          }
+            <form
+              className="submitNeg"
+              onSubmit={e => {
+                if (!this.context.userid) {
+                  this.context.signout();
+                  return <Redirect to="/" />;
+                }
+                e.preventDefault();
+                updateScoreNeg({
+                  variables: { userid: this.context.userid, wordid: cardid }
+                });
+              }}
+            ></form>
+          )}
         </Mutation>
       </div>
     );

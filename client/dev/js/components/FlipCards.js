@@ -14,6 +14,8 @@ import imgTick from '../../imgs/tick.png';
 import imgCross from '../../imgs/cross.png';
 import tapgif from '../../imgs/screentap.gif';
 
+import {IKNOWTHAT, IDONTKNOW} from '../constants';
+
 export class FlipCards extends Component {
 
   static contextType = AuthContext
@@ -52,14 +54,15 @@ export class FlipCards extends Component {
   }
 
   componentDidMount(){
-    if(!this.context.viewTutorial){
+    //TODO: restore if statemnt
+    // if(!this.context.viewTutorial){
       document.querySelector('.tap-gif-img').remove();
       document.querySelector('.tap-start-tut').remove();
       document.querySelector('.tap-gif').remove();
       document.querySelector('.correct-tut').remove();
       document.querySelector('.wrong-tut').remove();
       document.querySelector('.button-tut').remove();
-    }
+    // }
   }
 
   componentDidUpdate(){
@@ -97,13 +100,29 @@ export class FlipCards extends Component {
 
     return (
       <Fragment>
-      <Navigation path={this.props.location.pathname}
-                  context={this.context} />
-        <div className={this.state.runAnimation ? "cards_deck tutorial-animation" : "cards_deck"}>
-
+        <Navigation
+          path={this.props.location.pathname}
+          context={this.context}
+        />
+        <div
+          className={
+            this.state.runAnimation
+              ? "cards_deck" //TODO: readd tutorial-animation
+              : "cards_deck"
+          }
+        >
           <div className="left-gradient"></div>
           <div className="right-gradient"></div>
-          <div className="tap-gif" onClick={() => !this.state.runAnimation ? this.setState({runAnimation: true}) : {}}><img className="tap-gif-img" src={tapgif} /></div>
+          <div
+            className="tap-gif"
+            onClick={() =>
+              !this.state.runAnimation
+                ? this.setState({ runAnimation: false }) //TODO: reset to true
+                : {}
+            }
+          >
+            <img className="tap-gif-img" src={tapgif} />
+          </div>
           {query}
 
           <div className="swipe-buttons">
@@ -114,13 +133,29 @@ export class FlipCards extends Component {
               <img src={imgTick} />
             </div>
           </div>
-            <div className="correct-box"><span>Je sais cela!</span></div>
-            <div className="wrong-box"><span>J'en ai aucune idée...</span></div>
-            <div className="tap-start-tut"><span>Tap card to flip it</span></div>
-            <div className="correct-tut"><span>Swipe RIGHT if you know it</span></div>
-            <div className="wrong-tut"><span>Swipe LEFT if you don't</span></div>
-            <div className="button-tut"><span>Or use the corresponding buttons</span></div>
-            {this.state.goBack && <NavLink to="/MainMenu"><button className="end-of-stack">End of stack</button></NavLink>}
+          <div className="correct-box">
+            <span>{IKNOWTHAT}</span>
+          </div>
+          <div className="wrong-box">
+            <span>{IDONTKNOW}</span>
+          </div>
+          <div className="tap-start-tut">
+            <span>Tap card to flip it</span>
+          </div>
+          <div className="correct-tut">
+            <span>Swipe RIGHT if you know it</span>
+          </div>
+          <div className="wrong-tut">
+            <span>Swipe LEFT if you don't</span>
+          </div>
+          <div className="button-tut">
+            <span>Or use the corresponding buttons</span>
+          </div>
+          {this.state.goBack && (
+            <NavLink to="/MainMenu">
+              <button className="end-of-stack">End of stack</button>
+            </NavLink>
+          )}
         </div>
       </Fragment>
     );
